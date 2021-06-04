@@ -1,4 +1,4 @@
-package martian.riddles.view;
+package martian.riddles.ui;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,9 +24,9 @@ import martian.riddles.controllers.GetContextClass;
 import martian.riddles.controllers.RequestController;
 import martian.riddles.controllers.StatisticsController;
 import martian.riddles.controllers.StoredData;
-import martian.riddles.model.DataOfUser;
-import martian.riddles.model.Player;
-import martian.riddles.model.ResponseFromServer;
+import martian.riddles.dto.DataOfUser;
+import martian.riddles.dto.Player;
+import martian.riddles.dto.ResponseFromServer;
 
 public class LogupActivity extends AppCompatActivity {
 

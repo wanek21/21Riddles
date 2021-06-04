@@ -1,4 +1,4 @@
-package martian.riddles.view;
+package martian.riddles.ui;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
@@ -63,7 +63,7 @@ import martian.riddles.controllers.StoredData;
 import martian.riddles.controllers.UpdateDataController;
 import martian.riddles.exceptions.ErrorOnServerException;
 import martian.riddles.exceptions.NoInternetException;
-import martian.riddles.model.Player;
+import martian.riddles.dto.Player;
 
 
 public class QuestionActivity extends AppCompatActivity { // активити, где отображаются загадки

@@ -5,12 +5,12 @@ import java.io.IOException;
 import java.util.Locale;
 
 import martian.riddles.R;
-import martian.riddles.model.CheckAnswer;
-import martian.riddles.model.GetRiddle;
-import martian.riddles.model.Player;
+import martian.riddles.dto.CheckAnswer;
+import martian.riddles.dto.GetRiddle;
+import martian.riddles.dto.Player;
 import martian.riddles.exceptions.ErrorOnServerException;
 import martian.riddles.exceptions.NoInternetException;
-import martian.riddles.model.Riddle;
+import martian.riddles.dto.Riddle;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;

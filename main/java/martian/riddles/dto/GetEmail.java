@@ -1,9 +1,10 @@
-package martian.riddles.model;
+package martian.riddles.dto;
 
-public class GetPlace {
+public class GetEmail {
 
     private String nickname;
     private String token;
+    private String locale;
 
     public String getNickname() {
         return nickname;
@@ -19,5 +20,13 @@ public class GetPlace {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 }

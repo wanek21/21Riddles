@@ -16,7 +16,7 @@ import javax.net.ssl.*
 class RequestController private constructor() {
 
     private lateinit var retrofit: Retrofit
-    private val baseUrl = "https://139.59.178.208"
+    private val baseUrl = "https://192.168.0.21"//"https://139.59.178.208"
 
     companion object {
         val instance = RequestController()

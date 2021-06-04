@@ -1,4 +1,4 @@
-package martian.riddles.model;
+package martian.riddles.dto;
 
 /*Класс-обертка данных о пользователе.
   Этот класс преобразовывается в json с помощью Retrofit и отправляется на сервер

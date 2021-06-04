@@ -1,4 +1,4 @@
-package martian.riddles.view;
+package martian.riddles.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -7,15 +7,10 @@ import android.content.Intent;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,19 +22,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.SortedMap;
 
 import martian.riddles.BuildConfig;
 import martian.riddles.R;
 import martian.riddles.controllers.GetContextClass;
 import martian.riddles.controllers.Progress;
 import martian.riddles.controllers.RequestController;
-import martian.riddles.controllers.StatisticsController;
 import martian.riddles.controllers.StoredData;
-import martian.riddles.model.Leaders;
-import martian.riddles.model.Player;
-import martian.riddles.model.Prize;
-import martian.riddles.model.ResponseFromServer;
+import martian.riddles.dto.Leaders;
+import martian.riddles.dto.Player;
+import martian.riddles.dto.Prize;
+import martian.riddles.dto.ResponseFromServer;
 import martian.riddles.util.PreferencesToFromObject;
 import retrofit2.Call;
 import retrofit2.Callback;

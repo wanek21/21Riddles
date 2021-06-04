@@ -1,4 +1,4 @@
-package martian.riddles.model;
+package martian.riddles.dto;
 
 import martian.riddles.controllers.Progress;
 import martian.riddles.controllers.StoredData;

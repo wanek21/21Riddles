@@ -1,4 +1,4 @@
-package martian.riddles.view;
+package martian.riddles.ui;
 
 import android.animation.ObjectAnimator;
 import android.content.ActivityNotFoundException;
@@ -12,7 +12,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,12 +22,9 @@ import java.util.Locale;
 
 import martian.riddles.BuildConfig;
 import martian.riddles.R;
-import martian.riddles.controllers.GetContextClass;
 import martian.riddles.controllers.RequestController;
 import martian.riddles.controllers.StatisticsController;
-import martian.riddles.model.ResponseFromServer;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
+import martian.riddles.dto.ResponseFromServer;
 
 public class InfoActivity extends AppCompatActivity {
 

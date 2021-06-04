@@ -1,4 +1,4 @@
-package martian.riddles.model;
+package martian.riddles.dto;
 
 public class Riddle {
 

@@ -1,6 +1,6 @@
 package martian.riddles.controllers
 
-import martian.riddles.model.*
+import martian.riddles.dto.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*

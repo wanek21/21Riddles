@@ -17,12 +17,12 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="martian.riddles.view.InfoActivity"
+            android:name="martian.riddles.ui.InfoActivity"
             android:label="Info Activity"
             android:theme="@style/AppTheme"></activity>
-        <activity android:name="martian.riddles.view.DoneActivity" />
+        <activity android:name="martian.riddles.ui.DoneActivity" />
         <activity
-            android:name="martian.riddles.view.LogupActivity"
+            android:name="martian.riddles.ui.LogupActivity"
             android:screenOrientation="portrait" />
 
         <meta-data
@@ -33,7 +33,7 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name="martian.riddles.view.MainActivity"
+            android:name="martian.riddles.ui.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Launcher">
@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="martian.riddles.view.QuestionActivity"
+            android:name="martian.riddles.ui.QuestionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"> <!-- android:windowSoftInputMode="stateHidden|adjustResize" -->
         </activity>

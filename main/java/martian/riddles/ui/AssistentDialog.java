@@ -1,4 +1,4 @@
-package martian.riddles.view;
+package martian.riddles.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

@@ -1,4 +1,4 @@
-package martian.riddles.view;
+package martian.riddles.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.Group;
@@ -26,14 +26,10 @@ import martian.riddles.controllers.GetContextClass;
 import martian.riddles.controllers.Progress;
 import martian.riddles.controllers.RequestController;
 import martian.riddles.controllers.StoredData;
-import martian.riddles.exceptions.ErrorOnServerException;
-import martian.riddles.model.DataOfUser;
-import martian.riddles.model.GetEmail;
-import martian.riddles.model.GetPlace;
-import martian.riddles.model.Player;
-import martian.riddles.model.ResponseFromServer;
+import martian.riddles.dto.GetEmail;
+import martian.riddles.dto.GetPlace;
+import martian.riddles.dto.Player;
 import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 public class DoneActivity extends AppCompatActivity { // активити появляется после прохождения всех уровней
 

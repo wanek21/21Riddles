@@ -10,7 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import martian.riddles.model.Player;
+import martian.riddles.dto.Player;
 
 
 public class StatisticsController {

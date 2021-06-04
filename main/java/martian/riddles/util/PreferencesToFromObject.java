@@ -3,7 +3,7 @@ package martian.riddles.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import martian.riddles.model.Leaders;
+import martian.riddles.dto.Leaders;
 
 public class PreferencesToFromObject {
 
