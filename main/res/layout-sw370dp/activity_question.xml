@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mlMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back_question_activity"
+    app:layoutDescription="@xml/green_mark_anim">
+
+    <ImageView
+        android:id="@+id/imgBackToMain"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_back" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgGreenMark"
+        android:layout_width="111dp"
+        android:layout_height="111dp"
+        android:layout_marginTop="8dp"
+        android:maxWidth="121dp"
+        android:maxHeight="121dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvQuestion"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/green_mark_complete" />
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/mlLevel"
+        android:layout_width="40dp"
+        android:layout_height="96dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layoutDescription="@xml/change_lvl_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTop"
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            android:text="19"
+            android:textAlignment="center"
+            android:textColor="#8B8B8B"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvBottom"
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            android:text="18"
+            android:textAlignment="center"
+            android:textColor="#8B8B8B"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTop" />
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    <!--<androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvPartingWords"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:alpha="0"
+        android:fontFamily="@font/advent_pro_light"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="#9C9C9C"
+        app:layout_constraintBottom_toBottomOf="@+id/imgGreenMark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvQuestion"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Кто первый полетел в космос?"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        app:autoSizeMaxTextSize="35sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.32" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clInputAnswer"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgAnswerAnimation"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:srcCompat="@drawable/back_edtext_logup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <EditText
+            android:id="@+id/etAnswer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@null"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:hint="3 попытки"
+            android:textColorHint="#525252"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="0.9"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/mlCheckAndNext"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        app:layoutDescription="@xml/show_buy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clInputAnswer">
+
+        <Button
+            android:id="@+id/btnCheckAnswer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="32dp"
+            android:background="@drawable/click_btn_check"
+            android:elevation="21dp"
+            android:maxLines="1"
+            android:paddingLeft="20dp"
+            android:paddingTop="7dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="7dp"
+            android:text="@string/check_answer"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btnNextQuestion" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <ProgressBar
+            android:id="@+id/progressLoadAd"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toStartOf="@+id/btnNextQuestion"
+            app:layout_constraintStart_toEndOf="@+id/btnCheckAnswer"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/btnNextQuestion"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/back_btn_nextquestion"
+            android:clickable="false"
+            android:elevation="21dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="7dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="7dp"
+            android:text="@string/next_question"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnCheckAnswer"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgShowBuy"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/btnBuy"
+            app:layout_constraintStart_toEndOf="@+id/progressLoadAd"
+            app:layout_constraintTop_toTopOf="@id/btnBuy"
+            app:srcCompat="@drawable/ic_show_buy" />
+
+        <Button
+            android:id="@+id/btnBuy"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/click_btn_buy"
+            android:elevation="21dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="2dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="2dp"
+            android:text="@string/btn_purchase"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgShowBuy"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

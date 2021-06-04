@@ -1,0 +1,155 @@
+<resources>
+    <string name="app_name" translatable="false">21 Riddles</string>
+    <string name="ad_block" translatable="false">ca-app-pub-3637770884242866/5041268998</string><!--<string name="ad_block" translatable="false">ca-app-pub-3940256099942544/5224354917</string>-->
+
+    <!--ЭКРАН РЕГИСТРАЦИИ-->
+    <string name="logup_info">Hey, you only need a nickname for the game, write it here</string>
+    <string name="logup_warning">Important!
+        If you delete the app or delete its data, the nickname will not be returned.</string>
+    <string name="logup">Start game</string>
+    <string name="error_name">Invalid name</string>
+    <string name="invalid_long_name">The nickname must contain from 4 to 15 characters.</string>
+    <string name="login_exist">Nickname is already taken, think of something else.</string>
+    <string name="wrong_symbols">A nickname can only contain numbers and letters</string>
+    <string name="many_scapes">There should be no more than one space.</string>
+    <string name="bad_words">Bad words</string>
+
+    <!--ГЛАВНЫЙ ЭКРАН-->
+    <string name="winner_is">Winner:</string>
+    <string name="no_winner_text"><u>There is no winner yet, be the first</u></string>
+    <string name="winner_didnt_name">There is a winner, but he did not write his name</string>
+    <string name="winner_update_info">Information is updated every second</string>
+    <string name="link_towinner_copied">The link to the winner is copied</string>
+    <string name="empty_player">Empty</string>
+    <string name="start_game">Start game</string>
+    <string name="continue_game">Continue</string>
+    <string name="read_rules">The rules are here</string>
+    <string name="rules">Rules</string>
+    <string name="rules_text">
+        The first person to solve 21 riddles gets a prize.
+        Each riddle is given 3 attempts.
+        If they run out you can get one more if you watch the ad.</string>
+    <string name="read_rules_ok_btn">Whatever you say</string>
+    <string name="prize_text">Prize:</string>
+    <string name="prize">100 dollars</string>
+    <string name="update_btn">Update</string>
+    <string name="force_update_season">Good news! There is a new season, rather update:) (The previous season is now inactive)</string>
+    <string name="force_update_tech">It\'s time to update&#128528;</string>
+    <!--список фраз, напутсвий-->
+    <string name="parting_word1"></string>
+    <string name="parting_word2"></string>
+    <string name="parting_word3"></string>
+    <string name="parting_word4"></string>
+    <string name="parting_word5"></string>
+    <string name="parting_word6"></string>
+    <string name="parting_word7"></string>
+    <string name="parting_word8"></string>
+    <string name="parting_word9"></string>
+    <string name="parting_word10"></string>
+    <string name="parting_word11"></string>
+    <string name="parting_word12"></string>
+    <string name="parting_word13"></string>
+    <string name="parting_word14"></string>
+    <string name="parting_word15"></string>
+    <string name="parting_word16"></string>
+    <string name="parting_word17"></string>
+    <string name="parting_word18"></string>
+
+
+    <!--ЭКРАН С ЗАГАДКАМИ-->
+    <string name="next_question">Next</string>
+    <string name="check_answer">check</string>
+    <string name="look_ad">get a try</string>
+    <string name="attempts">attempts: </string>
+    <string name="zero_attempts">watch the ads to get a try</string>
+    <string name="no_internet">There is no internet</string>
+    <string name="internet_error">There is no internet</string>
+    <string name="ad_error_0">Error while connecting to ad server</string>
+    <string name="no_server">An error occurred while connecting to the server</string>
+    <string name="alert_last_lvl_title">Before the finish</string>
+    <string name="alert_check_on_server_title">Then more</string>
+    <string name="dialog_review_no">Later</string>
+    <string name="error_download_ad">The ad is not ready yet</string>
+    <string name="attempt_is_added">Attempt added</string>
+    <string name="alert_last_lvl">If you answer correctly, you will need an Internet connection</string>
+    <string name="alert_check_on_server">In the following puzzles the answers will be checked remotely via the Internet,
+        therefore there may be small delays</string>
+
+    <!--ЭКРАН ДЛЯ 2+ МЕСТ-->
+    <string name="your_place">Your place:</string>
+    <string name="finish_phrase_lose">Thank you so much for the game, I really hope you enjoyed it :)</string>
+
+    <!--ЭКРАНЫ ДЛЯ ПОБЕДИТЕЛЕЙ-->
+    <string name="write_email">Write to this email to contact me about the prize: </string>
+    <string name="finish_phrase_win">You`ve come a long way, I`m glad to see you here</string>
+    <string name="email_copy">Email copied</string>
+    <string name="write_review">leave a review</string>
+
+    <!--ХУЙ ПОЙМИ ГДЕ-->
+    <string name="dialog_review_mes">Leave a review?</string>
+    <string name="dialog_review_yes">Write a review</string>
+
+
+    <!--Заключительные слова для 2+ мест-->
+    <!--Реальные-->
+    <string name="place2_congratulations">The second place is like the first, only 1 less. </string>
+    <string name="place3_congratulations">The number 3 is very beautiful</string>
+    <string name="place4_congratulations">Fourth place of course not the first, but 4 more, than 1 and 2 combined</string>
+    <string name="place5_congratulations">If your favorite number is five then you are in luck</string>
+    <string name="place6_congratulations">If your favorite number is six then you are in luck</string>
+    <string name="place7_congratulations">If your favorite number is seven then you are in luck</string>
+    <string name="place8_congratulations">You of course steep, but not so, as some 7 people</string>
+    <string name="place9_congratulations">Если тебя спросят какое у тебя место, говори шестое, не говори, что шестерка перевернутая</string>
+    <string name="place10_congratulations">If your favorite number is ten, then you are in luck</string>
+    <string name="place11_congratulations">Congratulations, you won the chopsticks</string>
+    <string name="place12_congratulations">When I was 12 years old, I was 12 years old</string>
+    <string name="place13_congratulations">Dont tell me its Friday</string>
+    <string name="place14_congratulations">14 minutes coming up with a joke to the 14th place, and did not come up</string>
+    <string name="place_congratulations_default"></string>
+
+    <!-- загадки(вопросы) -->
+    <string name="qst1">A 7-letter word that starts with \"rain\" and ends with \"bow\"</string>
+    <string name="qst2">What is the bluest color?</string>
+    <string name="qst3">Days table</string>
+    <string name="qst4">Cartoon where the main character lives in a swamp and is friends with a donkey and a cat</string>
+    <string name="qst5">When you don\'t get enough sleep, you always want to do IT</string>
+    <string name="qst6">How many miles per hour does a car need to accelerate to travel in time?</string>
+    <string name="qst7">A word connecting sand, river, and money</string>
+    <string name="qst8">A place where one person is against you, another is for you, and the third decides who is right</string>
+    <string name="qst9">Bruce Willis, Mila Jovovich, Gary Oldman. The Periodic Table</string>
+
+    <!--ДЛЯ ТЕСТОВ-->
+    <string name="letter_from_gray">a</string>
+    <string name="and">and</string>
+    <string name="people">others</string>
+    <string name="lvl">lvl</string>
+    <string name="one_person">another</string>
+    <string name="complete_game_level" translatable="false">All</string>
+    <string name="tv_leaders">Leaders</string>
+    <string name="many_ip_logup">You can register a new username no more than 5 times a day</string>
+    <string name="current_level_info">Now the player decides this level</string>
+    <string name="btn_purchase">buy endless attempts</string>
+    <string name="date_start_season">The season started on February 2, 2020</string>
+    <string name="info_player">This player is the first to move to this level, except for those who are higher than him</string>
+    <string name="info_first_player">This player is the first to move to this level</string>
+    <string name="info_first_player_complete">This player solved all the puzzles first</string>
+    <string name="action_settings">Settings</string>
+    <string name="older_version">" This version of the app is not relevant, you can upgrade"</string>
+    <string name="current_version">You are using the current version</string>
+    <string name="there_is_no_telegram"></string>
+    <string name="install_telegram_btn">Install</string>
+    <string name="telegram_chanel">Telegram channel for news and other</string>
+    <string name="offer_review">Your feedback is very important, let me know what i can improve, fix or add</string>
+    <string name="level">level</string>
+    <string name="complete_level">Complete</string>
+    <string name="load_riddle_error">Something with the Internet , it is impossible to download the riddle. Please go to main screen and try again</string>
+    <string name="btn_telegram">go to</string>
+    <string name="server_error_logup">Server is not working or error occurred</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="currency_locale">dollars</string>
+    <string name="view_resluts_btn">View place</string>
+    <string name="ad_not_ready_yet">Ad is wasn\'t loaded yet</string>
+    <string name="download_info_error">Error loading information</string>
+    <string name="players5_10">others</string>
+
+</resources>

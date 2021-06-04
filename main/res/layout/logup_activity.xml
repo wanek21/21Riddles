@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back_logup">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/logo_test"
+        app:layout_constraintBottom_toTopOf="@+id/tvTopWord"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.17000002" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTopWord"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/logup_info"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.32999998" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLogupAnimation"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        app:srcCompat="@drawable/back_edtext_logup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTopWord"/>
+
+    <EditText
+        android:id="@+id/etLogin"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:background="@null"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTopWord" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnLogup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/back_btn_logup"
+        android:text="@string/logup"
+        android:textColor="#fff"
+        android:padding="9dp"
+        android:gravity="center"
+        android:translationZ="15dp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="@+id/etLogin"
+        app:layout_constraintStart_toStartOf="@+id/etLogin"
+        app:layout_constraintTop_toBottomOf="@+id/tvInvalidName" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvInvalidName"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="8dp"
+        android:text=""
+        app:autoSizeTextType="uniform"
+        android:textAlignment="center"
+        android:textColor="#FF6E40"
+        app:layout_constraintEnd_toEndOf="@+id/etLogin"
+        app:layout_constraintStart_toStartOf="@+id/etLogin"
+        app:layout_constraintTop_toBottomOf="@+id/etLogin" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

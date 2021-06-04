@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/info_gradient_end"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".view.InfoActivity"
+    tools:showIn="@layout/activity_info">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvRuleHead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="@string/rules"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textSize="35sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/rules_text"
+            android:fontFamily="@font/roboto_light"
+            android:textColor="#C8C8C8"
+            android:textSize="21sp"
+            android:textAlignment="center"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="#515151"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:padding="6dp"
+            android:background="@drawable/back_block_info">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/roboto_light"
+                android:text="@string/telegram_chanel"
+                android:textAlignment="center"
+                android:textColor="#EFEFEF"
+                android:textSize="19sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnTelegram"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginEnd="60dp"
+                android:background="@drawable/back_btn_telegram"
+                android:padding="3dp"
+                android:text="@string/btn_telegram"
+                android:textColor="#fff"
+                app:autoSizeTextType="uniform"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="#515151"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:padding="6dp"
+            android:background="@drawable/back_block_info">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/roboto_light"
+                android:text="@string/offer_review"
+                android:textAlignment="center"
+                android:textColor="#EFEFEF"
+                android:textSize="19sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnReview"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/back_btn_review_info"
+                android:padding="3dp"
+                android:text="@string/write_review"
+                android:textColor="#fff"
+                app:autoSizeTextType="uniform"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="#515151"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvInfoUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:textAlignment="center"
+            android:background="@drawable/back_block_info"
+            android:textColor="@color/current_version"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="21sp"
+            android:alpha="0"
+            android:text="@string/current_version"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnUpdateApp"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="90dp"
+            android:layout_marginEnd="90dp"
+            android:background="@drawable/back_btn_update_app"
+            android:padding="3dp"
+            android:text="@string/update_btn"
+            android:alpha="0"
+            android:clickable="false"
+            android:textColor="#fff"
+            app:autoSizeTextType="uniform"/>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

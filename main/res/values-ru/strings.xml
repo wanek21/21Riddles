@@ -1,0 +1,149 @@
+<resources>
+
+    <!--ЭКРАН РЕГИСТРАЦИИ-->
+    <string name="logup_info">Привет, для игры тебе нужен только никнейм</string>
+    <string name="logup_warning">Важно! Если удалить приложение или стереть его данные, никнейм уже не вернуть</string>
+    <string name="logup">Начать игру</string>
+    <string name="error_name">Недопустимое имя</string>
+    <string name="invalid_long_name">Никнейм должен содержать от 4 до 15 символов</string>
+    <string name="login_exist">Никнейм уже занят, придумай что-нибудь другое</string>
+    <string name="wrong_symbols">Никнейм может содержать только цифры, символы русского и английского алфавита</string>
+    <string name="many_scapes">Должно быть не больше одного пробела</string>
+    <string name="bad_words">Плохие слова</string>
+
+
+    <!--ГЛАВНЫЙ ЭКРАН-->
+    <string name="winner_is">Победитель:</string>
+    <string name="no_winner_text"><u>Победителя еще нет, будь первым!</u></string>
+    <string name="winner_didnt_name">Победитель есть, но он не написал свое имя</string>
+    <string name="winner_update_info">Информация обновляется каждую секунду</string>
+    <string name="link_towinner_copied">Ссылка на победителя скопирована</string>
+    <string name="empty_player">Пусто</string>
+    <string name="start_game">Начать</string>
+    <string name="continue_game">Продолжить игру</string>
+    <string name="read_rules">Правила здесь</string>
+    <string name="rules">Правила</string>
+    <string name="rules_text">Первый(ая) отгадываешь 21 загадку - получаешь приз.
+        На каждую загадку дается 3 попытки. Если они закончатся, можно получить еще одну, посмотрев рекламу.</string>
+    <string name="read_rules_ok_btn">Ок</string>
+    <string name="prize_text">Приз:</string>
+    <string name="prize">1000 рублей</string>
+    <string name="force_update_season">Хорошие новости, вышел новый сезон, скорей обновляйся:) (Предыдущий сезон теперь неактивный)</string>
+    <string name="force_update_tech">Вышло важное техническое обновление, нужно обновиться&#128528;</string>
+    <string name="update_btn">Обновить</string>
+
+
+    <!--ЭКРАН С ЗАГАДКАМИ-->
+    <string name="next_question">Дальше</string>
+    <string name="check_answer">проверить</string>
+    <string name="look_ad">получить попытку</string>
+    <string name="attempts">попыток: </string>
+    <string name="zero_attempts">посмотрите рекламу, чтобы добавить попытку</string>
+    <string name="no_internet">Отсутсвует подключение к интернету</string>
+    <string name="no_server">На сервере произошла ошибка</string>
+    <string name="alert_last_lvl_title">Перед финишем</string>
+    <string name="error_download_ad">Реклама еще не готова</string>
+    <string name="internet_error">Что-то с интернетом</string>
+    <string name="attempt_is_added">Попытка добавлена</string>
+    <string name="alert_check_on_server_title">Дальше круче</string>
+    <string name="alert_last_lvl">Если ты правильно ответишь на последнюю загадку, тебе понадобится подключение к интернету</string>
+    <string name="alert_check_on_server">В следующих загадках ответы будут проверятся удаленно через интернет, поэтому возможны небольшие задержки при проверке ответа</string>
+    <!--список фраз, напутствий-->
+    <string name="parting_word1">Совет: не можешь отгадать загадку сам(а), загадай её другому. У свежей головы свежие мысли</string>
+    <string name="parting_word2">Чем труднее путь, тем слаще победа</string>
+    <string name="parting_word3">Верю, что у тебя все получится</string>
+    <string name="parting_word4">Легкой бывает только легкая дорога, трудная дорога всегда трудна</string>
+    <string name="parting_word5">Не ошибается тот, кто не делает ошибок. Джейсон Стетхем</string>
+    <string name="parting_word6">Все получится, попыток у тебя также много, как президентских сроков у Путина</string>
+    <string name="parting_word7">Попытка не пытка, ёж не улитка</string>
+    <string name="parting_word8">Не получается найти ответ? Сделай перерыв, съешь котлету</string>
+    <string name="parting_word9"></string>
+    <string name="parting_word10"></string>
+    <string name="parting_word11"></string>
+    <string name="parting_word12"></string>
+    <string name="parting_word13"></string>
+    <string name="parting_word14"></string>
+    <string name="parting_word15"></string>
+    <string name="parting_word16"></string>
+    <string name="parting_word17"></string>
+    <string name="parting_word18"></string>
+
+
+    <!--ЭКРАНЫ ДЛЯ 2+ МЕСТ-->
+    <string name="finish_phrase_lose">Огромное спасибо за игру, очень надеюсь, что тебе понравилось :)</string>
+    <string name="write_review">оставить отзыв</string>
+    <string name="your_place">Твое место:</string>
+
+
+    <!--ЭКРАНЫ ДЛЯ ПОБЕДИТЕЛЕЙ-->
+    <string name="finish_phrase_win">Ну и долго тебя ждать? Уже почта запылилась</string>
+    <string name="write_email">Напиши на этот email, чтобы связаться со мной по поводу приза: </string>
+    <string name="email_copy">Email скопирован</string>
+
+
+    <!--ХУЙ ПОЙМИ ГДЕ-->
+    <string name="dialog_review_mes">Оставишь отзыв за себя и за сашку?</string>
+    <string name="dialog_review_yes">Написать отзыв</string>
+    <string name="dialog_review_no">Позже</string>
+
+
+
+    <!--______________________________________________________________________________________-->
+    <!--Заключительные слова для 2+ мест-->
+
+    <string name="place2_congratulations">Второе место это как первое, только на 1 меньше. </string>
+    <string name="place3_congratulations">Три - классное число</string>
+    <string name="place4_congratulations">Четвертое место конечно не первое, зато 4 больше, чем 1 и 2 вместе взятые</string>
+    <string name="place5_congratulations">Не победил, зато получил пятерку</string>
+    <string name="place6_congratulations">Хочешь прикол? Того, у кого будет 9 место, буду успокивать тем, что девятка это перевернутая шестерка</string>
+    <string name="place7_congratulations">Если твоя любимая цифра семь, тогда тебе повезло</string>
+    <string name="place8_congratulations">Ты конечно крут, но не настолько, как некоторые 7 людей</string>
+    <string name="place9_congratulations">Если тебя спросят какое у тебя место, говори шестое, не говори, что шестерка перевернутая</string>
+    <string name="place10_congratulations">Если твоя любимая цифра десять, тогда тебе повезло</string>
+    <string name="place11_congratulations">Поздравляю, ты выиграл(а) палочки для еды</string>
+    <string name="place12_congratulations">Когда мне было 12 лет, мне было 12 лет</string>
+    <string name="place13_congratulations">Только не говори, что сегодня пятница</string>
+    <string name="place14_congratulations">14 минут придумывал шутку к 14 месту, так и не придумал</string>
+    <string name="place_congratulations_default"></string>
+
+    <string name="qst1">Слово из 6 букв, начинаетя на \"рад\", заканчивается на \"уга\"</string>
+    <string name="qst2">Какой цвет самый синий?</string>
+    <string name="qst3">Таблица дней</string>
+    <string name="qst4">Мультфильм, где главный персонаж живет на болоте и дружит с ослом и котом</string>
+    <string name="qst5">Когда не выспался, постоянно хочется делать это</string>
+    <string name="qst6">До скольки миль в час нужно разогнать автомобиль, чтобы переместиться во времени?</string>
+    <string name="qst7">Слово, связывающее песок, речку и деньги</string>
+    <string name="qst8">Если повезет, я буду самым модным, если нет, меня будут бить</string>
+    <string name="qst9">Брюс Уиллис, Мила Йовович, Гэри Олдман. Таблица Менделеева</string>
+
+    <string name="letter_from_gray">и</string>
+    <string name="and">и еще</string>
+    <string name="people">игрока</string>
+    <string name="lvl">ур</string>
+    <string name="tv_leaders">Лидеры</string>
+    <string name="many_ip_logup">Можно регистрировать новый никнейм не больше 5 раз в день</string>
+    <string name="current_level_info">Сейчас игрок решает данный уровень</string>
+    <string name="btn_purchase">купить бесконечные попытки</string>
+    <string name="date_start_season">Сезон начался 2 февраля 2020</string>
+    <string name="info_player">Этот игрок первый перешел на данный уровень, если не считать тех, кто выше него</string>
+    <string name="info_first_player">Этот игрок первый перешел на данный уровень</string>
+    <string name="older_version">Эта версия приложения не актуальна, ты можешь обновиться</string>
+    <string name="current_version">Используется актуальная версия приложения</string>
+    <string name="there_is_no_telegram">Кажется у тебя не установлен телеграм, установить его из Google Play? (ссылка на канал скопирована)</string>
+    <string name="install_telegram_btn">Установить</string>
+    <string name="telegram_chanel">Канал в телеграме, где будет объявлен победитель и где ты можешь голосовать за новые идеи/правила/фишки в игре:</string>
+    <string name="offer_review">Ваши отзывы очень важны, дайте знать, что можно улучшить, исправить или добавить</string>
+    <string name="level">уровень</string>
+    <string name="complete_level">Пройдено</string>
+    <string name="load_riddle_error">Что-то с интернетом, невозможно загрузить загадку. Попробуйте вернуться на главный экран и снова зайти сюда.</string>
+    <string name="btn_telegram">перейти</string>
+    <string name="currency_locale">рублей</string>
+    <string name="ad_error_0">Ошибка при подключении к серверу рекламы</string>
+    <string name="ad_not_ready_yet">Реклама еще не загружена</string>
+    <string name="download_info_error">Ошибка при загрузке информации о приложении</string>
+    <string name="info_first_player_complete">Этот игрок решил все загадки первым</string>
+    <string name="view_resluts_btn">посмотреть место</string>
+    <string name="players5_10">игроков</string>
+    <string name="one_person" translatable="false">игрок</string>
+
+</resources>

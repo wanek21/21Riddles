@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvName"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/roboto_light"
+        android:gravity="bottom"
+        android:text="21st Martian"
+        android:textColor="#fff"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@+id/glineNameLevel"
+        app:layout_constraintEnd_toStartOf="@+id/glineLeft"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginEnd="32dp"
+        android:fontFamily="sans-serif-light"
+        android:gravity="bottom"
+        android:text="11 уровень"
+        android:textColor="@color/level"
+        app:layout_constraintBottom_toTopOf="@+id/glineNameLevel"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/glineNameLevel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.07" />
+
+    <ImageView
+        android:id="@+id/imgBackLevel"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/glineNameLevel"
+        app:srcCompat="@drawable/back_level" />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl1"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_level_left"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        android:alpha="0"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl2"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl2"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        android:alpha="0"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl1"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl3"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl2"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl4"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl3"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl5"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl6"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl4"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl6"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl7"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl5"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl7"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl8"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl6"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl8"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level2"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl9"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl7"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl9"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level2"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl10"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl8"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl10"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level2"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl11"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl9"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl11"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level2"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl12"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl10"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl12"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level2"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl13"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl11"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl13"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level2"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl14"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl12"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl14"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level2"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl15"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl13"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl15"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level2"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl16"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl14"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl16"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level2"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl17"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl15"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl17"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level2"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl18"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl16"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl18"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level3"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl19"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl17"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl19"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level3"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl20"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl18"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl20"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        app:srcCompat="@drawable/back_one_level3"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        app:layout_constraintEnd_toStartOf="@+id/imgLvl21"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl19"
+        android:alpha="0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLvl21"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="@dimen/space_between_lvl"
+        android:layout_marginTop="@dimen/margin_top_lvl"
+        android:layout_marginEnd="12dp"
+        android:alpha="0"
+        app:srcCompat="@drawable/back_level_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgLvl20"
+        app:layout_constraintTop_toBottomOf="@id/glineNameLevel" />
+</merge>

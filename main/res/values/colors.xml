@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#002241</color>
+    <color name="colorPrimaryLight">#022F55</color>
+    <color name="colorPrimaryDark">#000D1B</color>
+    <color name="top_color_edittext">#03172C</color>
+    <color name="bottom_color_edtitext">#03182F</color>
+    <color name="colorAccent">#00D7DC</color>
+    <color name="colorPrize">#40C4FF</color>
+    <color name="strokeEditText">#A86F10</color>
+    <color name="colorAdd">#FF99FF2A</color>
+    <color name="back">#46408E</color>
+    <color name="back_leaders">#001426</color>
+    <color name="count_players">#737373</color>
+    <color name="prize_stroke">#04376D</color>
+    <color name="leader_line">#FF9100</color>
+    <color name="second_line">#876AC6</color>
+    <color name="third_line">#7C56D3</color>
+    <color name="place_in_leader_board">#DDA448</color>
+
+    <color name="invalid_name">#fff</color>
+    <color name="strokeReview">#F4511E</color>
+    <color name="strokeReviewPressed">#F44336</color>
+
+    <color name="player_line">#04376D</color>
+    <color name="level">#2E81DB</color>
+    <color name="leader_level">#40C4FF</color>
+    <color name="leader_nickname">#40C4FF</color>
+
+    <color name="btn_check_answer">#04376D</color>
+    <color name="btn_check_answer_stroke">#40C4FF</color>
+    <color name="btn_next">#4caf50</color>
+
+    <color name="btnContinueGame">#FF331F</color>
+    <color name="btnContinueGamePressed">#7B34F8</color>
+    <color name="btnLogupStart">#7C4DFF</color>
+    <color name="btnLogupEnd">#536DFE</color>
+    <color name="warning">#FF6E40</color>
+    <color name="logup_gradient_end">#062342</color>
+    <color name="info_gradient_end">#062342</color>
+    <color name="one_level_block">#40C4FF</color>
+    <color name="one_level_block2">#7C8EFF</color>
+    <color name="one_level_block3">#37FF88</color>
+    <color name="one_level_block_current">#1D4A5E</color>
+    <color name="mainEditText">#010305</color>
+    <color name="edittext_login">#000D1B</color>
+    <color name="wrongAnswer">#D81B47</color>
+    <color name="current_version">#56D65C</color>
+    <color name="rightAnswer">#4CAF50</color>
+
+
+</resources>
