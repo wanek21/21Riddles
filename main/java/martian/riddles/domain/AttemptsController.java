@@ -1,6 +1,8 @@
-package martian.riddles.controllers;
+package martian.riddles.domain;
 
-import static martian.riddles.controllers.StoredData.DATA_COUNT_ATTEMPTS;
+import martian.riddles.data.local.StoredData;
+
+import static martian.riddles.data.local.StoredData.DATA_COUNT_ATTEMPTS;
 
 public class AttemptsController {
 

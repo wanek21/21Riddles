@@ -1,16 +1,19 @@
-package martian.riddles.controllers;
+package martian.riddles.domain;
 
 
 import java.io.IOException;
 import java.util.Locale;
 
 import martian.riddles.R;
+import martian.riddles.data.local.StoredData;
+import martian.riddles.data.remote.RequestController;
 import martian.riddles.dto.CheckAnswer;
 import martian.riddles.dto.GetRiddle;
 import martian.riddles.dto.Player;
 import martian.riddles.exceptions.ErrorOnServerException;
 import martian.riddles.exceptions.NoInternetException;
 import martian.riddles.dto.Riddle;
+import martian.riddles.util.GetContextClass;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;

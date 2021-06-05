@@ -7,7 +7,7 @@
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
-        android:name="martian.riddles.controllers.GetContextClass"
+        android:name="martian.riddles.util.GetContextClass"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

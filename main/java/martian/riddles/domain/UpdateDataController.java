@@ -1,9 +1,13 @@
-package martian.riddles.controllers;
+package martian.riddles.domain;
 
-import static martian.riddles.controllers.RiddlesController.DATA_CURRENT_RIDDLE;
-import static martian.riddles.controllers.RiddlesController.DATA_NEXT_RIDDLE;
-import static martian.riddles.controllers.RiddlesController.EMPTY_RIDDLE;
-import static martian.riddles.controllers.RiddlesController.ERROR_LOAD_RIDDLE;
+import martian.riddles.data.local.StoredData;
+import martian.riddles.data.remote.RequestController;
+import martian.riddles.util.GetContextClass;
+
+import static martian.riddles.domain.RiddlesController.DATA_CURRENT_RIDDLE;
+import static martian.riddles.domain.RiddlesController.DATA_NEXT_RIDDLE;
+import static martian.riddles.domain.RiddlesController.EMPTY_RIDDLE;
+import static martian.riddles.domain.RiddlesController.ERROR_LOAD_RIDDLE;
 
 public class UpdateDataController {
     private static final UpdateDataController ourInstance = new UpdateDataController();
@@ -25,12 +29,6 @@ public class UpdateDataController {
         if(!isConnection) isConnection = RequestController
                 .hasConnection(GetContextClass.getContext()); // if there is no connection, try again
         return isConnection;
-    }
-    public boolean winnerIsChecked() {
-        return StoredData.getDataBool(StoredData.DATA_WINNER_IS_CHECKED);
-    }
-    public void setWinnerChecked(boolean check) {
-        StoredData.saveData(StoredData.DATA_WINNER_IS_CHECKED,check);
     }
     public boolean nextRiddleIsLoaded() {
         String riddle = StoredData.getDataString(DATA_NEXT_RIDDLE,ERROR_LOAD_RIDDLE);

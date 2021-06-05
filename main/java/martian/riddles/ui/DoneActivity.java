@@ -22,10 +22,10 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import martian.riddles.R;
-import martian.riddles.controllers.GetContextClass;
-import martian.riddles.controllers.Progress;
-import martian.riddles.controllers.RequestController;
-import martian.riddles.controllers.StoredData;
+import martian.riddles.util.GetContextClass;
+import martian.riddles.domain.Progress;
+import martian.riddles.data.remote.RequestController;
+import martian.riddles.data.local.StoredData;
 import martian.riddles.dto.GetEmail;
 import martian.riddles.dto.GetPlace;
 import martian.riddles.dto.Player;

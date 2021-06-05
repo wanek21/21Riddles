@@ -1,4 +1,4 @@
-package martian.riddles.controllers;
+package martian.riddles.util;
 
 import android.app.Application;
 import android.content.Context;

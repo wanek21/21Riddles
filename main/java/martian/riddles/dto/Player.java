@@ -1,7 +1,7 @@
 package martian.riddles.dto;
 
-import martian.riddles.controllers.Progress;
-import martian.riddles.controllers.StoredData;
+import martian.riddles.domain.Progress;
+import martian.riddles.data.local.StoredData;
 
 public class Player {
 

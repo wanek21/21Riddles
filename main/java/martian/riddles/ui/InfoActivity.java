@@ -22,8 +22,8 @@ import java.util.Locale;
 
 import martian.riddles.BuildConfig;
 import martian.riddles.R;
-import martian.riddles.controllers.RequestController;
-import martian.riddles.controllers.StatisticsController;
+import martian.riddles.data.remote.RequestController;
+import martian.riddles.domain.StatisticsController;
 import martian.riddles.dto.ResponseFromServer;
 
 public class InfoActivity extends AppCompatActivity {

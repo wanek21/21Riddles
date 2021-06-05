@@ -1,7 +1,9 @@
-package martian.riddles.controllers;
+package martian.riddles.data.local;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import martian.riddles.util.GetContextClass;
 
 
 public class StoredData { // класс, реализующий доступ к сохраненным на устройстве данным

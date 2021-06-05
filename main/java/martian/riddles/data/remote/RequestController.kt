@@ -1,4 +1,4 @@
-package martian.riddles.controllers
+package martian.riddles.data.remote
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -9,7 +9,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.security.*
 import java.security.cert.Certificate
 import java.security.cert.CertificateFactory
-import java.security.cert.X509Certificate
 import javax.net.ssl.*
 
 

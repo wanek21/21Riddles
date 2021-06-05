@@ -25,10 +25,10 @@ import java.util.Locale;
 
 import martian.riddles.BuildConfig;
 import martian.riddles.R;
-import martian.riddles.controllers.GetContextClass;
-import martian.riddles.controllers.Progress;
-import martian.riddles.controllers.RequestController;
-import martian.riddles.controllers.StoredData;
+import martian.riddles.util.GetContextClass;
+import martian.riddles.domain.Progress;
+import martian.riddles.data.remote.RequestController;
+import martian.riddles.data.local.StoredData;
 import martian.riddles.dto.Leaders;
 import martian.riddles.dto.Player;
 import martian.riddles.dto.Prize;
@@ -40,8 +40,8 @@ import retrofit2.Response;
 import yanzhikai.textpath.AsyncTextPathView;
 import yanzhikai.textpath.calculator.AroundCalculator;
 
-import static martian.riddles.controllers.StoredData.DATA_COUNT_LAUNCH_APP;
-import static martian.riddles.controllers.StoredData.DATA_DONE_GAME_ANIM_COMPLETE;
+import static martian.riddles.data.local.StoredData.DATA_COUNT_LAUNCH_APP;
+import static martian.riddles.data.local.StoredData.DATA_DONE_GAME_ANIM_COMPLETE;
 
 
 public class MainActivity extends AppCompatActivity {

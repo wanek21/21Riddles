@@ -20,10 +20,10 @@ import java.io.IOException;
 import java.util.Random;
 
 import martian.riddles.R;
-import martian.riddles.controllers.GetContextClass;
-import martian.riddles.controllers.RequestController;
-import martian.riddles.controllers.StatisticsController;
-import martian.riddles.controllers.StoredData;
+import martian.riddles.util.GetContextClass;
+import martian.riddles.data.remote.RequestController;
+import martian.riddles.domain.StatisticsController;
+import martian.riddles.data.local.StoredData;
 import martian.riddles.dto.DataOfUser;
 import martian.riddles.dto.Player;
 import martian.riddles.dto.ResponseFromServer;

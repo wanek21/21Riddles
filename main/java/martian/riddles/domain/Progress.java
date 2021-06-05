@@ -1,10 +1,10 @@
-package martian.riddles.controllers;
+package martian.riddles.domain;
 
 
-import android.util.Log;
+import martian.riddles.data.local.StoredData;
 
-import static martian.riddles.controllers.StoredData.DATA_COUNT_LAUNCH_APP;
-import static martian.riddles.controllers.StoredData.DATA_LEVEL;
+import static martian.riddles.data.local.StoredData.DATA_COUNT_LAUNCH_APP;
+import static martian.riddles.data.local.StoredData.DATA_LEVEL;
 
 public class Progress { // класс синглтон для управления уровнем(прогрессом)
     private int level;
