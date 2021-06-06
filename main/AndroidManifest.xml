@@ -22,7 +22,7 @@
             android:theme="@style/AppTheme"></activity>
         <activity android:name="martian.riddles.ui.DoneActivity" />
         <activity
-            android:name="martian.riddles.ui.LogupActivity"
+            android:name="martian.riddles.ui.SignUpActivity"
             android:screenOrientation="portrait" />
 
         <meta-data

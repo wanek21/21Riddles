@@ -19,7 +19,7 @@ interface ServerApi {
     // регистрация логина
     @Headers("User-Agent: dont touch")
     @POST("/users/add/")
-    fun logup(@Body dataOfUser: DataOfUser?): Call<ResponseFromServer?>?
+    fun singUp(@Body registerUser: RegisterUser?): Call<StandardResponse?>?
 
     // получение списка лидеров
     @GET("/users/leaders/")

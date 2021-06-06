@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-class DatabaseModule {
+class LocalDataModule {
 
     val APP_PREFERENCES = "app_data"
 
@@ -24,7 +24,6 @@ class DatabaseModule {
         return context.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
     }
 
-    @Singleton
     @Provides
     fun getEdit(sharedPreferences: SharedPreferences): SharedPreferences.Editor {
         return sharedPreferences.edit()

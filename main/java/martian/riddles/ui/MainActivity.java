@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if(StoredData.getDataString(Player.DATA_NAME_PLAYER,Player.getInstance().getName()).equals("")) {
-            startActivity(new Intent(this,LogupActivity.class));
+            startActivity(new Intent(this, SignUpActivity.class));
             finish();
         }
         setTheme(R.style.AppTheme);

@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import martian.riddles.R;
+import martian.riddles.dto.RegisterUser;
 import martian.riddles.util.GetContextClass;
 import martian.riddles.data.remote.RequestController;
 import martian.riddles.domain.StatisticsController;
@@ -28,7 +29,7 @@ import martian.riddles.dto.DataOfUser;
 import martian.riddles.dto.Player;
 import martian.riddles.dto.ResponseFromServer;
 
-public class LogupActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     private TextView tvInfo;
     private ImageView imgAnimation;
@@ -109,12 +110,12 @@ public class LogupActivity extends AppCompatActivity {
 
     View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
 
-        private boolean wasShow = false;
+        private boolean wasShown = false;
 
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
             if (hasFocus) {
-                if (!wasShow) { // если warning еще не был показан
+                if (!wasShown) { // если warning еще не был показан
                     animateError(R.string.logup_warning, 7000);
                 }
                 TransitionDrawable transitionDrawable = (TransitionDrawable) imgAnimation.getDrawable();
@@ -143,15 +144,19 @@ public class LogupActivity extends AppCompatActivity {
             if (validateLoginStatus != LOGIN_IS_ACCESS) return null;
             else {
                 resultLogin = login;
-                DataOfUser dataOfUser = new DataOfUser();
-                dataOfUser.setNickname(login.concat(StoredData.DATA_WINS));
-                usersToken = generateRandomHexString(42);
-                dataOfUser.setToken(usersToken);
+                String unString = "";
                 if (Build.VERSION.SDK_INT <= 28) {
-                    dataOfUser.setUniqueString(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                    unString = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
                 }
+                usersToken = generateRandomHexString(42);
+                RegisterUser registerUser = new RegisterUser(
+                        login.concat(StoredData.DATA_WINS),
+                        unString,
+                        usersToken
+                );
+
                 try {
-                    if(!RequestController.hasConnection(LogupActivity.this)) { // проверка наличия интернета
+                    if(!RequestController.hasConnection(SignUpActivity.this)) { // проверка наличия интернета
                         ResponseFromServer response = new ResponseFromServer();
                         response.setResultCode(NO_INTERNET);
                         return response;
@@ -159,7 +164,7 @@ public class LogupActivity extends AppCompatActivity {
                     ResponseFromServer response = RequestController.Companion // получем приз
                             .getInstance()
                             .getApiService(GetContextClass.getContext())
-                            .logup(dataOfUser)
+                            .singUp(registerUser)
                             .execute().body();
                     if (response == null) {
                         response = new ResponseFromServer();
@@ -206,7 +211,7 @@ public class LogupActivity extends AppCompatActivity {
                     Player.getInstance().setToken(usersToken);
                     Player.getInstance().setName(resultLogin);
                     statisticsController.signUp();
-                    startActivity(new Intent(LogupActivity.this, MainActivity.class));
+                    startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                     finish();
                 } else if (res.getResultCode() == MANY_LOGUP_IP) {
                     animateError(R.string.many_ip_logup, 4000);
