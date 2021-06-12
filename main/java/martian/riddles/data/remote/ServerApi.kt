@@ -1,5 +1,6 @@
 package martian.riddles.data.remote
 
+import com.skydoves.sandwich.ApiResponse
 import martian.riddles.dto.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -19,7 +20,7 @@ interface ServerApi {
     // регистрация логина
     @Headers("User-Agent: dont touch")
     @POST("/users/add/")
-    fun singUp(@Body registerUser: RegisterUser?): Call<StandardResponse?>?
+    suspend fun singUp(@Body registerUser: RegisterUser?): ApiResponse<StandardResponse>
 
     // получение списка лидеров
     @GET("/users/leaders/")

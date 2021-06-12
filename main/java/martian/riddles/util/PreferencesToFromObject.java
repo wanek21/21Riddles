@@ -15,9 +15,9 @@ public class PreferencesToFromObject {
             if(oneLevelLeader.equals("0-0-...")) continue;
 
             Leaders leadersOnLevel = new Leaders();
-            leadersOnLevel.setRiddle(Integer.parseInt(oneLevelLeader.split("-")[0]));
+            /*leadersOnLevel.setRiddle(Integer.parseInt(oneLevelLeader.split("-")[0]));
             leadersOnLevel.setNickname(oneLevelLeader.split("-")[2]);
-            leadersOnLevel.setCountUsersOnThisRiddle(Integer.parseInt(oneLevelLeader.split("-")[1]));
+            leadersOnLevel.setCountUsersOnThisRiddle(Integer.parseInt(oneLevelLeader.split("-")[1]));*/
             result.add(leadersOnLevel);
         }
 

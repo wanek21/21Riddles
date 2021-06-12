@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import martian.riddles.BuildConfig;
 import martian.riddles.R;
 import martian.riddles.util.GetContextClass;
@@ -43,7 +44,7 @@ import yanzhikai.textpath.calculator.AroundCalculator;
 import static martian.riddles.data.local.StoredData.DATA_COUNT_LAUNCH_APP;
 import static martian.riddles.data.local.StoredData.DATA_DONE_GAME_ANIM_COMPLETE;
 
-
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
     private Button btnNext;
@@ -67,14 +68,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(StoredData.getDataString(Player.DATA_NAME_PLAYER,Player.getInstance().getName()).equals("")) {
+        if(true/*StoredData.getDataString(Player.DATA_NAME_PLAYER,Player.getInstance().getName()).equals("")*/) {
             startActivity(new Intent(this, SignUpActivity.class));
             finish();
         }
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        StoredData.saveData(DATA_COUNT_LAUNCH_APP,StoredData.getDataInt(DATA_COUNT_LAUNCH_APP,0)+1); // увеличиваем кол-во звапусков игры на один
+        //StoredData.saveData(DATA_COUNT_LAUNCH_APP,StoredData.getDataInt(DATA_COUNT_LAUNCH_APP,0)+1); // увеличиваем кол-во звапусков игры на один
         locale = Locale.getDefault().getLanguage();
 
 
@@ -674,7 +675,7 @@ public class MainActivity extends AppCompatActivity {
                                     newLeaders = response.body();
                                     if(newLeaders != null) {
                                         List<Leaders> oldLeaders = PreferencesToFromObject.toLeadersList(StoredData.getDataString(DATA_LEADERS,"0-0-...;0-0-...;0-0-...;0-0-...;"));
-                                        if(newLeaders.size() > 0 && newLeaders.get(0).isCompleteGame()) newLeaders.get(0).setRiddle(22);
+                                        /*if(newLeaders.size() > 0 && newLeaders.get(0).isCompleteGame()) newLeaders.get(0).setRiddle(22);*/
                                         StoredData.saveData(DATA_LEADERS,PreferencesToFromObject.toLeadersString(newLeaders));
                                         for(int i = 0; i < newLeaders.size(); i++) {
                                             newPlayersNames.add(i, newLeaders.get(i).getNickname());

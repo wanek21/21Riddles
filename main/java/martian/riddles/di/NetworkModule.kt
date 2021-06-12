@@ -1,6 +1,7 @@
 package martian.riddles.di
 
 import android.content.Context
+import com.skydoves.sandwich.coroutines.CoroutinesResponseCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +25,7 @@ import javax.net.ssl.X509TrustManager
 @Module
 class NetworkModule {
 
-    private val baseUrl = "http://192.168.0.21:3000"
+    private val baseUrl = "https://192.168.0.21"
 
     @Provides
     @Singleton
@@ -32,6 +33,7 @@ class NetworkModule {
         return Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(CoroutinesResponseCallAdapterFactory())
                 .client(okHttpClient)
                 .build()
     }
@@ -44,7 +46,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    private fun generateSecureOkHttpClient(context: Context): OkHttpClient {
+    fun generateSecureOkHttpClient(@ApplicationContext context: Context): OkHttpClient {
         val certificateFactory = CertificateFactory.getInstance("X.509")
 
         val inputStream = context.resources.openRawResource(R.raw.riddles_cert) //(.crt)
