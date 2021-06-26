@@ -515,7 +515,25 @@
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintVertical_weight="40" />
 
-    <yanzhikai.textpath.AsyncTextPathView
+    <TextView
+        android:id="@+id/tvPrize"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/back_prize_test"
+        android:gravity="center_horizontal|center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPrizeText"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_weight="60"
+        android:textSize="49sp"
+        android:textColor="@color/colorPrize"/>
+
+    <!--<yanzhikai.textpath.AsyncTextPathView
         android:id="@+id/tvPrize"
         android:layout_width="0dp"
         android:layout_height="100dp"
@@ -536,7 +554,7 @@
         app:showInStart="true"
         app:showPainter="true"
         app:textInCenter="true"
-        app:textSize="49sp" />
+        app:textSize="49sp" />-->
 
     <ImageView
         android:id="@+id/btnHelp"

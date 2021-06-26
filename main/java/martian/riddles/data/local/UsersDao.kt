@@ -5,11 +5,9 @@ import androidx.room.*
 @Dao
 interface UsersDao {
 
-    // данные о других игроках
-
-    @Query("SELECT * FROM leaders ORDER BY level")
-    fun getLeaders(): List<Leader>
+    @Query("SELECT * FROM leaders")
+    suspend fun getLeaders(): List<Leader>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun setLeader(leader: Leader)
+    suspend fun saveLeaders(leaders: List<Leader>)
 }

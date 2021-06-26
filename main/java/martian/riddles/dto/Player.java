@@ -17,7 +17,7 @@ public class Player {
     }
 
     private Player() {
-        name = StoredData.getDataString(DATA_NAME_PLAYER,"");
+        name = "";//StoredData.getDataString(DATA_NAME_PLAYER,"");
     }
 
     public String getName() {

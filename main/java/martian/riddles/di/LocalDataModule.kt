@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @Module
 class LocalDataModule {
 
-    val APP_PREFERENCES = "app_data"
+    private val APP_PREFERENCES = "app_data"
 
     @Singleton
     @Provides

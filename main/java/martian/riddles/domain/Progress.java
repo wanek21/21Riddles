@@ -19,12 +19,13 @@ public class Progress { // класс синглтон для управлени
 
     private Progress() { this.level = getLevelFromStorage(); }
     private static int getLevelFromStorage() { // получение уровня игрока из какой-нибудь базы данных
-        int countLaunches = StoredData.getDataInt(DATA_COUNT_LAUNCH_APP,0);
+        /*int countLaunches = StoredData.getDataInt(DATA_COUNT_LAUNCH_APP,0);
         int level = SecurityController.decodeLevel(StoredData.getDataInt(DATA_LEVEL,DEFAULT_LEVEL));
         if(level != -1) {
             if(countLaunches == 1 && level > 1) level = 1; // для защиты от взлома
         } else level = 1;
-        return level;
+        return level;*/
+        return 1;
     }
     public void levelUp() {
         level++;

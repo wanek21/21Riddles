@@ -15,7 +15,7 @@ interface ServerApi {
     // получение приза
     @Headers("User-Agent: dont touch")
     @GET("/main/prize/")
-    fun getPrize(@Query("prize") queryTrue: String?, @Query("locale") locale: String?): Call<Prize?>?
+    suspend fun getPrize(@Query("prize") queryTrue: String?, @Query("locale") locale: String?): ApiResponse<Prize>
 
     // регистрация логина
     @Headers("User-Agent: dont touch")
@@ -24,7 +24,7 @@ interface ServerApi {
 
     // получение списка лидеров
     @GET("/users/leaders/")
-    fun getLeaders(@Query("lead") lead: String?): Call<List<Leaders?>?>?
+    suspend fun getLeaders(@Query("lead") lead: String?): ApiResponse<List<Leaders>>
 
     // узнать место игрока по нику
     @POST("/users/place/")

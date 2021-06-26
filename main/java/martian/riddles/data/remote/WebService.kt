@@ -5,6 +5,7 @@ import com.skydoves.sandwich.message
 import com.skydoves.sandwich.suspendOnError
 import com.skydoves.sandwich.suspendOnFailure
 import com.skydoves.sandwich.suspendOnSuccess
+import martian.riddles.dto.Leaders
 import martian.riddles.dto.RegisterUser
 import martian.riddles.dto.RegisterUser.StatusCode
 import martian.riddles.util.Resource
@@ -14,6 +15,10 @@ class WebService @Inject constructor(
         private val serverApi: ServerApi
 ){
 
+    // секретные слова, которые нужно передавать в запросах
+    private val GET_PRIZE_KEY = "chair"
+
+    // регистрация
     suspend fun signUp(registerUser: RegisterUser): Resource<*> {
         var result: Resource<*> = Resource.error("Unknown error", null)
 
@@ -40,6 +45,44 @@ class WebService @Inject constructor(
             Log.d("my","connection error")
             result = Resource.error("Connection error",null)
         }
+        return result
+    }
+
+    // получить список лидеров
+    suspend fun getLeaders(): Resource<List<Leaders>> {
+        var result: Resource<List<Leaders>> = Resource.error("Unknown error", null)
+
+        val response = serverApi.getLeaders("please")
+        response.suspendOnSuccess {
+            if(this.data != null) {
+                Log.d("my", "webService: leaders received")
+                result = Resource.success(this.data)
+            }
+        }.suspendOnError {
+            result = Resource.error(this.message(), null)
+        }.suspendOnFailure {
+            result = Resource.error("Connection error", null)
+        }
+
+        return result
+    }
+
+    // получить приз
+    suspend fun getPrize(locale: String): Resource<String> {
+        var result: Resource<String> = Resource.error("Unknown error", null)
+
+        val response = serverApi.getPrize(GET_PRIZE_KEY, locale)
+        response.suspendOnSuccess {
+            if(this.data != null) {
+                result = Resource.success(this.data!!.prize)
+                Log.d("my","webService prize: ${result.data}")
+            }
+        }.suspendOnError {
+            result = Resource.error(this.message(), null)
+        }.suspendOnFailure {
+            result = Resource.error("Connection error", null)
+        }
+
         return result
     }
 }
