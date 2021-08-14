@@ -5,6 +5,7 @@ import com.skydoves.sandwich.message
 import com.skydoves.sandwich.suspendOnError
 import com.skydoves.sandwich.suspendOnFailure
 import com.skydoves.sandwich.suspendOnSuccess
+import martian.riddles.dto.GetRiddle
 import martian.riddles.dto.Leaders
 import martian.riddles.dto.RegisterUser
 import martian.riddles.dto.RegisterUser.StatusCode
@@ -15,7 +16,9 @@ class WebService @Inject constructor(
         private val serverApi: ServerApi
 ){
 
-    // секретные слова, которые нужно передавать в запросах
+    private val failureErrorMessage: String = "Connection error"
+
+    // секретные слова, которые нужно передавать в запросах (+2 к безопасности)
     private val GET_PRIZE_KEY = "chair"
 
     // регистрация
@@ -43,7 +46,7 @@ class WebService @Inject constructor(
             result = Resource.error(this.message(),null)
         }.suspendOnFailure {
             Log.d("my","connection error")
-            result = Resource.error("Connection error",null)
+            result = Resource.error(failureErrorMessage,null)
         }
         return result
     }
@@ -61,17 +64,17 @@ class WebService @Inject constructor(
         }.suspendOnError {
             result = Resource.error(this.message(), null)
         }.suspendOnFailure {
-            result = Resource.error("Connection error", null)
+            result = Resource.error(failureErrorMessage, null)
         }
 
         return result
     }
 
     // получить приз
-    suspend fun getPrize(locale: String): Resource<String> {
+    suspend fun getPrize(language: String): Resource<String> {
         var result: Resource<String> = Resource.error("Unknown error", null)
 
-        val response = serverApi.getPrize(GET_PRIZE_KEY, locale)
+        val response = serverApi.getPrize(GET_PRIZE_KEY, language)
         response.suspendOnSuccess {
             if(this.data != null) {
                 result = Resource.success(this.data!!.prize)
@@ -80,7 +83,26 @@ class WebService @Inject constructor(
         }.suspendOnError {
             result = Resource.error(this.message(), null)
         }.suspendOnFailure {
-            result = Resource.error("Connection error", null)
+            result = Resource.error(failureErrorMessage, null)
+        }
+
+        return result
+    }
+
+    suspend fun getRiddle(getRiddle: GetRiddle): Resource<String> {
+        var result: Resource<String> = Resource.error("Unknown error", null)
+
+
+        val response = serverApi.getRiddle(getRiddle)
+        response.suspendOnSuccess {
+            if(this.data != null) {
+                result = Resource.success(this.data!!.riddle)
+                Log.d("my","webService riddle: ${result.data}")
+            }
+        }.suspendOnError {
+            result = Resource.error(this.message(), null)
+        }.suspendOnFailure {
+            result = Resource.error(failureErrorMessage, null)
         }
 
         return result

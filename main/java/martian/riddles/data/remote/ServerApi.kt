@@ -33,7 +33,7 @@ interface ServerApi {
     // получение загадки
     @Headers("User-Agent: dont touch")
     @POST("/riddles/")
-    fun getRiddle(@Body getRiddle: GetRiddle?): Call<Riddle?>?
+    suspend fun getRiddle(@Body getRiddle: GetRiddle?): ApiResponse<Riddle>
 
     // получение email
     @Headers("User-Agent: dont touch")

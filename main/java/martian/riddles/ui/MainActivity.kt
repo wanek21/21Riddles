@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity() {
             R.id.btnNext -> {
                 val intent: Intent?
                 if (viewModel.getLevel() < 22) {
-                    intent = Intent(this@MainActivity, QuestionActivity::class.java)
+                    intent = Intent(this@MainActivity, RiddlesActivity::class.java)
                     intent.putExtra("past_level", Player.getInstance().level)
                 } else if (viewModel.getLevel() == 22) {
                     intent = Intent(this@MainActivity, DoneActivity::class.java)

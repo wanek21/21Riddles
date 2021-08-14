@@ -5,6 +5,7 @@ import java.util.List;
 
 import martian.riddles.dto.Leaders;
 
+// TODO("remove")
 public class PreferencesToFromObject {
 
     public static List<Leaders> toLeadersList(String leadersString) {

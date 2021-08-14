@@ -45,6 +45,10 @@ class UsersRepository @Inject constructor(
         return sharedPreferences.getInt(DataKeys.LEVEL.key, 0)
     }
 
+    fun getMyToken(): String {
+        return sharedPreferences.getString(DataKeys.TOKEN.key, "") ?: ""
+    }
+
     fun upMyLevel() { // увеличить уровень на 1
         val currentLevel = sharedPreferences.getInt(DataKeys.LEVEL.key, 0)
         editSharedPreferences.putInt(DataKeys.LEVEL.key, (currentLevel+1))

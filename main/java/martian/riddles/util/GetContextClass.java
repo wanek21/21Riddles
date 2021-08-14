@@ -3,6 +3,7 @@ package martian.riddles.util;
 import android.app.Application;
 import android.content.Context;
 
+//TODO("remove")
 public class GetContextClass extends Application { // класс исключительно для получения context
 
     private static Context context;

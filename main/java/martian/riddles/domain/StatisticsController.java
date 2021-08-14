@@ -30,7 +30,6 @@ public class StatisticsController {
         StoredData.saveData(StoredData.DATA_START_TIME, nowDateString);*/
     }
 
-    // отправка статистики на сервер
     public void sendAttempt(boolean endlessAttempts) {
         /*Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Level: " + Player.getInstance().getLevel());

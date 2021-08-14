@@ -11,7 +11,7 @@ import java.security.cert.Certificate
 import java.security.cert.CertificateFactory
 import javax.net.ssl.*
 
-
+//TODO("remove")
 class RequestController private constructor() {
 
     private lateinit var retrofit: Retrofit

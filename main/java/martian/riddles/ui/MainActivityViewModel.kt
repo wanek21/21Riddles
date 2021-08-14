@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import martian.riddles.data.repositories.GameInfoRepository
@@ -32,7 +33,7 @@ class MainActivityViewModel @Inject constructor(
     val prize: LiveData<Resource<String>> = _prize
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repeat(1000) {
                 Log.d("my","repeat leaders update")
                 val leaders = usersRepository.getLeaders()

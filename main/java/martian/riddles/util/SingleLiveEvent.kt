@@ -9,7 +9,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import java.util.concurrent.atomic.AtomicBoolean
 
-
+// MutableLiveData, которая срабатывает только один раз
+// используется в основном с navigation component
 class SingleLiveEvent<T> : MutableLiveData<T>() {
     private val mPending = AtomicBoolean(false)
     @MainThread

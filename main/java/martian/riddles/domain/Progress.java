@@ -6,6 +6,7 @@ import martian.riddles.data.local.StoredData;
 import static martian.riddles.data.local.StoredData.DATA_COUNT_LAUNCH_APP;
 import static martian.riddles.data.local.StoredData.DATA_LEVEL;
 
+//TODO("remove")
 public class Progress { // класс синглтон для управления уровнем(прогрессом)
     private int level;
     private boolean isDone = false;

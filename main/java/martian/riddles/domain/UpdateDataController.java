@@ -9,6 +9,7 @@ import static martian.riddles.domain.RiddlesController.DATA_NEXT_RIDDLE;
 import static martian.riddles.domain.RiddlesController.EMPTY_RIDDLE;
 import static martian.riddles.domain.RiddlesController.ERROR_LOAD_RIDDLE;
 
+//TODO("remove")
 public class UpdateDataController {
     private static final UpdateDataController ourInstance = new UpdateDataController();
 

@@ -1,5 +1,6 @@
 package martian.riddles.dto;
 
+//TODO("remove")
 public class ResponseFromServer { // ответ от сервера
 
     private String winner; // имя победителя

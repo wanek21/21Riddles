@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="martian.riddles.ui.QuestionActivity"
+            android:name="martian.riddles.ui.RiddlesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"> <!-- android:windowSoftInputMode="stateHidden|adjustResize" -->
         </activity>

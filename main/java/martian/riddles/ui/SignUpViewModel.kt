@@ -57,7 +57,7 @@ class SignUpViewModel @Inject constructor(
 
     /* генерация токена (случайный набор цифр и букв)
     * в теории у кого то могут сгенерироваться одинаковые токены, но
-    * это очень маловероятно и абсолютно не страшно.
+    * это очень маловероятно и не особо страшно.
     */
     private fun generateRandomHexString(length: Int): String {
         val r = Random()
