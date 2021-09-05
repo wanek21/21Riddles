@@ -23,6 +23,7 @@ import martian.riddles.dto.Player
 import martian.riddles.ui.*
 import martian.riddles.util.Resource
 import martian.riddles.util.Status
+import martian.riddles.util.log
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -46,7 +47,6 @@ class MainActivity : AppCompatActivity() {
     private val playersCount = ArrayList<Int>()*/
     private val DATA_LEADERS = "leaders_list"
 
-
     private var leadersController: LeadersController? = null
     private var levelController: LevelController? = null
 
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         when (it.status) {
             Status.SUCCESS -> {
                 val prize = it.data + " " + getString(R.string.currency_locale);
-                Log.d("my", "mainactivity prize: $prize")
+                log( "mainactivity prize: $prize")
                 tvPrize?.text = prize
             }
         }
@@ -507,7 +507,7 @@ class MainActivity : AppCompatActivity() {
         fun updateLeaders(newLeaders: ArrayList<Leaders>?) {
             if (newLeaders != null) {
 
-                Log.d("my", "updating leaders")
+                log( "updating leaders")
                 // проходимся по текущим данным, если что-то не совпадает с новыми данными, обновляем
                 for ((i, row) in leadersData.withIndex()) {
                     if (row.nickname != newLeaders[i].nickname) {

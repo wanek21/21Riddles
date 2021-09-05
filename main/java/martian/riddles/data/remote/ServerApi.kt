@@ -42,5 +42,5 @@ interface ServerApi {
 
     // проверка ответа
     @POST("/riddles/answer/")
-    fun checkAnswer(@Body checkAnswer: CheckAnswer?): Call<ResponseBody?>?
+    fun checkAnswer(@Body checkAnswer: CheckAnswer?): ApiResponse<ResponseBody>
 }

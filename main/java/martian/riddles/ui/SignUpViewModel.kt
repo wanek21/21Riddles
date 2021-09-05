@@ -1,27 +1,24 @@
 package martian.riddles.ui
 
-import android.app.Application
-import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import martian.riddles.data.repositories.UsersRepository
 import martian.riddles.dto.RegisterUser
 import martian.riddles.util.NicknameValidation
 import martian.riddles.util.Resource
-import martian.riddles.util.Status
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val usersRepository: UsersRepository,
-    application: Application // для доступа к context
-) : AndroidViewModel(application) {
+    private val usersRepository: UsersRepository
+) : ViewModel() {
 
     private val TOKEN_LENGTH = 42
-
-    private val context = getApplication<Application>()
 
     private val _registerStatus: MutableLiveData<Resource<*>> = MutableLiveData()
     val registerStatus: LiveData<Resource<*>> = _registerStatus
@@ -33,24 +30,16 @@ class SignUpViewModel @Inject constructor(
         nick = nick.trim(' ') // обрезаем пробелы в начале и конце
         val nicknameValid = isNicknameValid(nick)
         if (nicknameValid != NicknameValidation.NICKNAME_IS_ACCEPTED) { // если ник не прошел валидацию
-            _registerStatus.value =
-                Resource.error(context.getString(nicknameValid.errorMessage), null)
+            _registerStatus.value = Resource.error(nicknameValid.errorMessage, null)
         } else {
             val token = generateRandomHexString(TOKEN_LENGTH)
             val registerUser = RegisterUser(
-                nickname = "$nick;wins4", // добвляем строку к концу ника (+2 к безопасности)
+                nickname = "$nick;wins4", // добавляем соль к концу ника (+2 к безопасности)
                 uniqueString = "", // уникальный id устройства, уже не нужен, но на бэке остался
                 token = token
             )
             viewModelScope.launch {
-                var signUpResult = usersRepository.signUp(registerUser)
-                if (signUpResult.status == Status.ERROR) {
-                    signUpResult.message = context.getString(signUpResult.data as Int)
-                } else {
-                    Log.d("my", "check loggin: " + usersRepository.isLogged())
-                }
-                _registerStatus.value = signUpResult
-
+                _registerStatus.value = usersRepository.signUp(registerUser)
             }
         }
     }

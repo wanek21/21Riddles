@@ -11,6 +11,7 @@ import martian.riddles.dto.Leaders
 import martian.riddles.dto.RegisterUser
 import martian.riddles.util.Resource
 import martian.riddles.util.Status
+import martian.riddles.util.log
 import javax.inject.Inject
 
 class UsersRepository @Inject constructor(
@@ -57,9 +58,9 @@ class UsersRepository @Inject constructor(
 
     suspend fun getLeaders(): Resource<ArrayList<Leaders>> {
         return withContext(Dispatchers.IO) {
-            Log.d("my", "before dao getting leaders")
+            log( "before dao getting leaders")
             val leadersDao = usersDao.getLeaders()
-            Log.d("my", "after dao getting leaders")
+            log( "after dao getting leaders")
             refreshLeaders()
             Resource.success(Leaders.fromDao(leadersDao))
         }
@@ -68,16 +69,16 @@ class UsersRepository @Inject constructor(
     private suspend fun refreshLeaders() {
         val leaders = webService.getLeaders()
         if(leaders.status == Status.SUCCESS) {
-            Log.d("my", "before transform")
+            log( "before transform")
             val leadersDao = Leaders.toDao(leaders.data)
             usersDao.saveLeaders(leadersDao)
-            Log.d("my", "after dao saving")
+            log( "after dao saving")
         }
     }
 
     fun isLogged(): Boolean {
         val nickname = sharedPreferences.getString(DataKeys.NICKNAME.key,"")
-        //Log.d("my", "nick check: $nickname")
+        //log( "nick check: $nickname")
         return (nickname?.isNotEmpty() == true)
     }
 }

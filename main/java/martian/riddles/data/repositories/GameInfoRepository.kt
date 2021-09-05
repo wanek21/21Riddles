@@ -9,6 +9,7 @@ import martian.riddles.data.local.GameInfoDao
 import martian.riddles.data.remote.WebService
 import martian.riddles.util.Resource
 import martian.riddles.util.Status
+import martian.riddles.util.log
 import javax.inject.Inject
 
 class GameInfoRepository @Inject constructor(
@@ -20,7 +21,7 @@ class GameInfoRepository @Inject constructor(
     suspend fun getPrize(locale: String): Resource<String> {
         return withContext(Dispatchers.IO) {
             var prize = sharedPreferences.getString(DataKeys.PRIZE.key, "100")
-            Log.d("my", "saved prize: $prize")
+            log( "saved prize: $prize")
             refreshPrize(locale)
             Resource.success(prize)
         }

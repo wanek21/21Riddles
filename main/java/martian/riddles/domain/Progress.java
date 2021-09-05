@@ -40,9 +40,9 @@ public class Progress { // класс синглтон для управлени
     }
 
     private void incrementSaveLevel() { // увеличивает записанный в памяти уровень на 1
-        int currentLevel = SecurityController.decodeLevel(StoredData.getDataInt(DATA_LEVEL,DEFAULT_LEVEL));
+        /*int currentLevel = SecurityController.decodeLevel(StoredData.getDataInt(DATA_LEVEL,DEFAULT_LEVEL));
         int incLevel = currentLevel+1;
-        StoredData.saveData(DATA_LEVEL,SecurityController.encodeLevel(incLevel));
+        StoredData.saveData(DATA_LEVEL,SecurityController.encodeLevel(incLevel));*/
     }
 
     public boolean isDone() {

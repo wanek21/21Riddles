@@ -15,6 +15,7 @@ import martian.riddles.dto.Leaders
 import martian.riddles.util.Resource
 import martian.riddles.util.SingleLiveEvent
 import martian.riddles.util.Status
+import martian.riddles.util.log
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -25,7 +26,6 @@ class MainActivityViewModel @Inject constructor(
     private val gameInfoRepository: GameInfoRepository
 ) : ViewModel() {
 
-
     private val _leaders: MutableLiveData<Resource<ArrayList<Leaders>>> = MutableLiveData()
     val leaders: LiveData<Resource<ArrayList<Leaders>>> = _leaders
 
@@ -35,14 +35,14 @@ class MainActivityViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             repeat(1000) {
-                Log.d("my","repeat leaders update")
+                log("repeat leaders update")
                 val leaders = usersRepository.getLeaders()
-                //Log.d("my","received leaders")
+                //log("received leaders")
                 if(leaders.status == Status.SUCCESS) {
-                    //Log.d("my", "leaders received successfully")
+                    //log( "leaders received successfully")
                     _leaders.value = leaders
                 } else {
-                    //Log.d("my","error leaders")
+                    //log("error leaders")
                 }
 
                 _prize.value = gameInfoRepository.getPrize(Locale.getDefault().language)

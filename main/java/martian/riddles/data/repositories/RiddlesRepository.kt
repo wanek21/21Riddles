@@ -6,18 +6,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import martian.riddles.R
-import martian.riddles.data.local.Data
 import martian.riddles.data.local.DataKeys
-import martian.riddles.data.local.StoredData
 import martian.riddles.data.remote.WebService
-import martian.riddles.domain.RiddlesController
+import martian.riddles.dto.CheckAnswer
 import martian.riddles.dto.GetRiddle
-import martian.riddles.dto.Player
-import martian.riddles.exceptions.NoInternetException
-import martian.riddles.util.GetContextClass
 import martian.riddles.util.Resource
 import martian.riddles.util.Status
-import org.intellij.lang.annotations.Language
 import javax.inject.Inject
 
 class RiddlesRepository @Inject constructor(
@@ -75,19 +69,32 @@ class RiddlesRepository @Inject constructor(
 
     private suspend fun loadRiddleFromServer(getRiddle: GetRiddle) {
         val riddle = webService.getRiddle(getRiddle)
-
-        if (riddle.status == Status.SUCCESS)
+        if (riddle.status == Status.SUCCESS) {
             editor.putString(
-                if(getRiddle.isNext) DataKeys.NEXT_RIDDLE.key else DataKeys.CURRENT_RIDDLE.key,
+                if (getRiddle.isNext) DataKeys.NEXT_RIDDLE.key else DataKeys.CURRENT_RIDDLE.key,
                 riddle.data
             )
-        else
-            editor.putString(DataKeys.NEXT_RIDDLE.key, DataKeys.ERROR_LOAD_RIDDLE.key)
+        } else {
+            editor.putString(
+                if (getRiddle.isNext) DataKeys.NEXT_RIDDLE.key else DataKeys.CURRENT_RIDDLE.key,
+                DataKeys.ERROR_LOAD_RIDDLE.key
+            )
+        }
 
         editor.commit()
     }
 
-    fun checkAnswer(answer: String) {
+    suspend fun checkAnswer(checkAnswer: CheckAnswer): Resource<String> {
+        return webService.checkAnswer(checkAnswer)
+    }
 
+    // меняем в памяти местами текущую загадку и следующую
+    fun replaceCurrentRiddle(currentLevel: Int) {
+        if (currentLevel < 21) {
+            val nextRiddle = sharedPreferences.getString(DataKeys.NEXT_RIDDLE.key, DataKeys.EMPTY_RIDDLE.key)
+            editor.putString(DataKeys.CURRENT_RIDDLE.key, nextRiddle)
+            editor.putString(DataKeys.NEXT_RIDDLE.key, DataKeys.EMPTY_RIDDLE.key)
+            editor.commit()
+        }
     }
 }

@@ -1,6 +1,7 @@
 package martian.riddles.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,8 +18,12 @@ class ControllersModule {
 
     @Provides
     @Singleton
-    fun getAttemptsController(statisticsController: StatisticsController): AttemptsController {
-        return AttemptsController(statisticsController)
+    fun getAttemptsController(
+        statisticsController: StatisticsController,
+        sharedPreferences: SharedPreferences,
+        editor: SharedPreferences.Editor
+    ): AttemptsController {
+        return AttemptsController(statisticsController, sharedPreferences, editor)
     }
 
     @Provides

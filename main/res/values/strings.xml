@@ -151,5 +151,7 @@
     <string name="ad_not_ready_yet">Ad is wasn\'t loaded yet</string>
     <string name="download_info_error">Error loading information</string>
     <string name="players5_10">others</string>
+    <string name="error_on_server">Error on server</string>
+    <string name="connection_error">Connection error. Something with internet</string>
 
 </resources>

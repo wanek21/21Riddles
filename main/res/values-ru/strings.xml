@@ -85,8 +85,9 @@
     <string name="dialog_review_mes">Оставишь отзыв за себя и за сашку?</string>
     <string name="dialog_review_yes">Написать отзыв</string>
     <string name="dialog_review_no">Позже</string>
-
-
+    
+    <string name="error_on_server">Ошибка на сервере. Фиксики уже решают проблему</string>
+    
 
     <!--______________________________________________________________________________________-->
     <!--Заключительные слова для 2+ мест-->
@@ -145,5 +146,7 @@
     <string name="view_resluts_btn">посмотреть место</string>
     <string name="players5_10">игроков</string>
     <string name="one_person" translatable="false">игрок</string>
+    <string name="connection_error">Что-то с интернетом</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
 
 </resources>

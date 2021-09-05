@@ -1,36 +1,20 @@
-package martian.riddles.domain;
+package martian.riddles.domain
 
-
-import android.content.Context;
-import android.os.Bundle;
+import android.content.Context
 
 //import com.google.firebase.analytics.FirebaseAnalytics;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import martian.riddles.dto.Player;
-
-
-public class StatisticsController {
-
-   // private FirebaseAnalytics mFirebaseAnalytics;
-    private Context context;
-
-    public StatisticsController(Context context) {
-        this.context = context;
-        //mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
-    }
-
-    public void setStartTimeLevel() { // установить время начала прохождения уровня
+class StatisticsController     //mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+    (  // private FirebaseAnalytics mFirebaseAnalytics;
+    private val context: Context
+) {
+    fun setStartTimeLevel() { // установить время начала прохождения уровня
         /*SimpleDateFormat format = new SimpleDateFormat("hh dd MM yyyy");
         Date nowDate = new Date();
         String nowDateString = format.format(nowDate);
         StoredData.saveData(StoredData.DATA_START_TIME, nowDateString);*/
     }
 
-    public void sendAttempt(boolean endlessAttempts) {
+    fun sendAttempt(endlessAttempts: Boolean) {
         /*Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Level: " + Player.getInstance().getLevel());
         bundle.putDouble(FirebaseAnalytics.Param.VALUE, endlessAttempts ? 0 : 1);
@@ -38,40 +22,40 @@ public class StatisticsController {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SPEND_VIRTUAL_CURRENCY, bundle);*/
     }
 
-    public void sendPurchase(int countWrongAttempts) {
+    fun sendPurchase(countWrongAttempts: Int) {
         /*Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Count wrong attempts");
         bundle.putInt(FirebaseAnalytics.Param.VALUE, countWrongAttempts);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.ECOMMERCE_PURCHASE, bundle);*/
     }
 
-    public void sendErrorAd(int errorCode) {
+    fun sendErrorAd(errorCode: Int) {
         /*Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Error showing ad");
         bundle.putInt(FirebaseAnalytics.Param.VALUE, errorCode);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.CAMPAIGN_DETAILS, bundle);*/
     }
 
-    public void signUp() {
+    fun signUp() {
         /*Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.SIGN_UP_METHOD,"Sign up");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Param.SIGN_UP_METHOD,bundle);*/
     }
 
-    public void joinGroup() { // не совсем вступление в группу, а просто переход в нее
+    fun joinGroup() { // не совсем вступление в группу, а просто переход в нее
         /*Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.GROUP_ID, "Telegram");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.JOIN_GROUP, bundle);*/
     }
 
-    public void earnAttempt(int count) {
+    fun earnAttempt(count: Int) {
         /*Bundle bundle = new Bundle();
         bundle.putDouble(FirebaseAnalytics.Param.VALUE, count);
         bundle.putString(FirebaseAnalytics.Param.VIRTUAL_CURRENCY_NAME, "Attempts");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.EARN_VIRTUAL_CURRENCY, bundle);*/
     }
 
-    public void sendNewLevel(int level) {
+    fun sendNewLevel(level: Int) {
         // отправляем данные в Firebase
         /*Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.CHARACTER, "Some riddle");

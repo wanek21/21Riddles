@@ -1,10 +1,8 @@
 package martian.riddles.ui
 
 import android.animation.ObjectAnimator
-import android.content.Intent
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.View.ALPHA
 import android.view.View.OnFocusChangeListener
@@ -14,9 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
 import martian.riddles.R
-import martian.riddles.domain.StatisticsController
 import martian.riddles.util.Resource
 import martian.riddles.util.Status
+import martian.riddles.util.log
 
 @AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
@@ -29,6 +27,8 @@ class SignUpActivity : AppCompatActivity() {
     private var errorAnimatorShow = ObjectAnimator.ofFloat(tvError, ALPHA, 1.0f, 0.0f)
     private var errorAnimatorHide = ObjectAnimator.ofFloat(tvError, ALPHA, 0.0f, 1.0f)
 
+    private val errorShowingTime = 4000 // в миллисекундах
+
     private val viewModel: SignUpViewModel by lazy {
         ViewModelProvider(this).get(SignUpViewModel::class.java)
     }
@@ -37,18 +37,17 @@ class SignUpActivity : AppCompatActivity() {
         when (it.status) {
             Status.SUCCESS -> {
                 btnSignUp?.isClickable = true
-                Log.d("my","go to main activity")
+                log("go to main activity")
                 /*val mainActivityIntent = Intent(this, MainActivity::class.java)
                 startActivity(mainActivityIntent)
                 finish()*/
-                Toast.makeText(this,"Okay",Toast.LENGTH_LONG).show()
             }
             Status.LOADING -> {
                 btnSignUp?.isClickable = false
             }
             Status.ERROR -> {
                 btnSignUp?.isClickable = true
-                showError(it.message!!, 4000)
+                showError(it.message!!, errorShowingTime)
             }
         }
     }
@@ -64,8 +63,6 @@ class SignUpActivity : AppCompatActivity() {
         btnSignUp?.setOnClickListener {
             if (etLogin?.text.toString() != "") {
                 viewModel.signUp(etLogin?.text.toString())
-                /*val logupTask = LogupTask()
-                logupTask.execute(etLogin?.getText().toString())*/
             }
         }
         etLogin?.onFocusChangeListener = onFocusChangeListener
@@ -73,30 +70,20 @@ class SignUpActivity : AppCompatActivity() {
         viewModel.registerStatus.observe(this, registerStatusObserver)
     }
 
-    private fun showError(errorString: String, duration: Int) {
-        if (errorAnimatorHide.isStarted) {
+    // высвечивает ошибки на определенное время
+    private fun showError(errorStringId: Int, duration: Int) {
+        if (errorAnimatorHide.isStarted) { // если прошлая ошибка еще не исчезла, то отменяем прошлую анимацию
             errorAnimatorShow.cancel()
             errorAnimatorHide.cancel()
-            tvError!!.text = errorString
-            errorAnimatorHide = ObjectAnimator.ofFloat(tvError, ALPHA, 1.0f, 0.0f)
-            errorAnimatorShow = ObjectAnimator.ofFloat(tvError, ALPHA, 0.0f, 1.0f)
-            errorAnimatorHide.duration = 800
-            errorAnimatorHide.startDelay = duration.toLong()
-            errorAnimatorShow.duration = 800
-            errorAnimatorShow.start()
-            errorAnimatorHide.start()
-            return
-        } else {
-            tvError!!.text = errorString
-            errorAnimatorHide = ObjectAnimator.ofFloat(tvError, ALPHA, 1.0f, 0.0f)
-            errorAnimatorShow = ObjectAnimator.ofFloat(tvError, ALPHA, 0.0f, 1.0f)
-            errorAnimatorHide.duration = 800
-            errorAnimatorHide.startDelay = duration.toLong()
-            errorAnimatorShow.duration = 800
-            errorAnimatorShow.start()
-            errorAnimatorHide.start()
-            return
         }
+        tvError?.text = getString(errorStringId)
+        errorAnimatorHide = ObjectAnimator.ofFloat(tvError, ALPHA, 1.0f, 0.0f)
+        errorAnimatorShow = ObjectAnimator.ofFloat(tvError, ALPHA, 0.0f, 1.0f)
+        errorAnimatorHide.duration = 800
+        errorAnimatorHide.startDelay = duration.toLong()
+        errorAnimatorShow.duration = 800
+        errorAnimatorShow.start()
+        errorAnimatorHide.start()
     }
 
     private var onFocusChangeListener: OnFocusChangeListener = object : OnFocusChangeListener {
@@ -104,7 +91,7 @@ class SignUpActivity : AppCompatActivity() {
         override fun onFocusChange(v: View, hasFocus: Boolean) {
             if (hasFocus) {
                 if (!wasShown) { // если warning еще не был показан
-                    showError(getString(R.string.logup_warning), 7000)
+                    showError(R.string.logup_warning, 7000)
                 }
                 val transitionDrawable = imgAnimation!!.drawable as TransitionDrawable
                 transitionDrawable.startTransition(1200)

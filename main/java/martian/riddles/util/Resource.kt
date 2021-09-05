@@ -1,7 +1,11 @@
 package martian.riddles.util
 
-/* Сообщения из ошибок записываются в message, НЕ в date */
-data class Resource<out T>(val status: Status, val data: T?, var message: String?) {
+/* Сообщения из ошибок записываются в message, НЕ в data */
+data class Resource<out T>(
+    val status: Status,
+    val data: T?,
+    var message: Int? // android resource string id (R.string)
+) {
 
     companion object {
 
@@ -9,7 +13,7 @@ data class Resource<out T>(val status: Status, val data: T?, var message: String
             return Resource(Status.SUCCESS, data, null)
         }
 
-        fun <T> error(msg: String, data: T?): Resource<T> {
+        fun <T> error(msg: Int, data: T?): Resource<T> {
             return Resource(Status.ERROR, data, msg)
         }
 
@@ -18,5 +22,4 @@ data class Resource<out T>(val status: Status, val data: T?, var message: String
         }
 
     }
-
 }

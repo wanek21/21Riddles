@@ -49,8 +49,8 @@ class RiddlesActivity : AppCompatActivity() {
     private var mlBottom: MotionLayout? = null
     private var imgShowBuy: ImageView? = null
     private var btnBuy: Button? = null
-    private val riddlesController = RiddlesController()
-    private var statisticsController: StatisticsController? = null
+    //private val riddlesController = RiddlesController()
+    //private var statisticsController: StatisticsController? = null
     private var handler: Handler? = null
     private var answerInputAnimation: Handler? = null
     private var animationController: AnimationController? = null
@@ -124,11 +124,11 @@ class RiddlesActivity : AppCompatActivity() {
                         loadAd()
                     }
                     CHANGE_ANSWER -> {
-                        tvQuestion!!.text = riddlesController.riddle
+                        //tvQuestion!!.text = riddlesController.riddle
                     }
                     CHANGE_HINT_ANSWER -> {
                         if (!attemptsController!!.isEndlessAttempts) {
-                            val countAttempts = attemptsController!!.countAttempts
+                            /*val countAttempts = attemptsController!!.countAttempts
                             if (countAttempts > 0 && countAttempts <= 3) {
                                 etAnswer!!.hint =
                                     resources.getString(R.string.attempts) + " " + countAttempts
@@ -139,7 +139,7 @@ class RiddlesActivity : AppCompatActivity() {
                                     resources.getString(R.string.attempts) + " " + countAttempts
                                 btnCheckAnswer!!.maxLines = 2
                                 btnCheckAnswer!!.setText(R.string.look_ad)
-                            }
+                            }*/
                         } else {
                             etAnswer!!.hint = ""
                         }
@@ -191,10 +191,10 @@ class RiddlesActivity : AppCompatActivity() {
                 animationController!!.focusEditText()
             }
         }
-        statisticsController = StatisticsController(this)
+        //statisticsController = StatisticsController(this)
         //purchaseController = PurchaseController(this)
         animationController = AnimationController()
-        attemptsController = AttemptsController(statisticsController)
+        //attemptsController = AttemptsController(statisticsController)
 
         // если юзер разгадал все, но не проверил является ли он победителем
         /*if (!StoredData.getDataBool(StoredData.DATA_WINNER_IS_CHECKED) && Progress.getInstance().level < 22) {
@@ -231,7 +231,7 @@ class RiddlesActivity : AppCompatActivity() {
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                     super.onAdFailedToLoad(loadAdError)
-                    statisticsController!!.sendErrorAd(loadAdError.code)
+                    //statisticsController!!.sendErrorAd(loadAdError.code)
                     when (loadAdError.code) {
                         0 -> Toast.makeText(
                             this@RiddlesActivity,
@@ -250,7 +250,7 @@ class RiddlesActivity : AppCompatActivity() {
 
     // показать рекламу, чтобы добавить попытку
     val attemptByAd: Unit
-        get() { // показать рекламу, чтобы добавить попытку
+        get() {
             if (rewardedAd != null) {
                 rewardedAd!!.show(
                     this
@@ -336,7 +336,6 @@ class RiddlesActivity : AppCompatActivity() {
 
     // внутренние контроллеры и потоки -----------------------------------------------------------------------------
 
-
     private inner class AnimationController {
         /*переменная хранит состояние поля ввода ответа
         0 - обычное
@@ -350,7 +349,7 @@ class RiddlesActivity : AppCompatActivity() {
         private var answerTransitions: TransitionDrawable? = null
 
         fun setAttemptsOnScreen() {
-            val countAttempts = attemptsController!!.countAttempts
+            /*val countAttempts = attemptsController!!.countAttempts
             if (attemptsController!!.isEndlessAttempts) {
                 btnCheckAnswer!!.maxLines = 1
                 btnCheckAnswer!!.setText(R.string.check_answer)
@@ -365,7 +364,7 @@ class RiddlesActivity : AppCompatActivity() {
                 btnCheckAnswer!!.maxLines = 1
                 btnCheckAnswer!!.setText(R.string.check_answer)
                 etAnswer!!.hint = resources.getString(R.string.attempts) + " " + countAttempts
-            }
+            }*/
         }
 
         fun focusEditText() {
@@ -558,15 +557,15 @@ class RiddlesActivity : AppCompatActivity() {
                 }
             }
             R.id.btnCheckAnswer -> {
-                if (attemptsController!!.isEndlessAttempts) {
-                    /*val checkAnswerTask = CheckAnswerTask()
-                    checkAnswerTask.execute(etAnswer!!.text.toString())*/
+                /*if (attemptsController!!.isEndlessAttempts) {
+                    *//*val checkAnswerTask = CheckAnswerTask()
+                    checkAnswerTask.execute(etAnswer!!.text.toString())*//*
                 } else if (attemptsController!!.countAttempts == 0) {
                     attemptByAd
                 } else {
-                    /*val checkAnswerTask = CheckAnswerTask()
-                    checkAnswerTask.execute(etAnswer!!.text.toString())*/
-                }
+                    *//*val checkAnswerTask = CheckAnswerTask()
+                    checkAnswerTask.execute(etAnswer!!.text.toString())*//*
+                }*/
             }
             R.id.imgBackToMain -> {
                 // при возвращении на главную активити отправляем разницу между уровнем, когда юзер был на главном экране, и уровнем на данный момент

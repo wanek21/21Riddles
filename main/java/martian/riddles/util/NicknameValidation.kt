@@ -9,8 +9,4 @@ enum class NicknameValidation(val errorMessage: Int) {
     LONG_NICKNAME (R.string.invalid_long_name),
     MANY_SPACES (R.string.many_scapes), // больше одного пробела
     NICKNAME_IS_ACCEPTED (0)
-    /*SERVER_DOES_NOT_WORKING,
-    UNKNOWN_ERROR,
-    NO_INTERNET,
-    SERVER_ERROR*/
 }

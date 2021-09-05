@@ -1,11 +1,8 @@
 package martian.riddles.domain
 
 import android.content.SharedPreferences
-import martian.riddles.data.local.Data
 import martian.riddles.data.local.DataKeys
-import martian.riddles.data.local.StoredData
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class AttemptsController @Inject constructor(
     private val statisticsController: StatisticsController?, // для отправки статистики Firebase

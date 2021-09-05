@@ -2,6 +2,7 @@ package martian.riddles.dto
 
 import android.util.Log
 import martian.riddles.data.local.Leader
+import martian.riddles.util.log
 
 data class Leaders(
     val riddle: Int = 0,
@@ -26,7 +27,7 @@ data class Leaders(
                     )
                 }
             }
-            Log.d("my", resultLeaders.toString())
+            log( resultLeaders.toString())
             return resultLeaders
         }
         fun toDao(l: List<Leaders>?): ArrayList<Leader> {
@@ -47,7 +48,7 @@ data class Leaders(
                     )
                 }
             }
-            Log.d("my", "toDao: $resultLeaders")
+            log( "toDao: $resultLeaders")
             return resultLeaders
         }
     }
