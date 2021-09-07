@@ -25,7 +25,7 @@ import javax.net.ssl.X509TrustManager
 @Module
 class NetworkModule {
 
-    private val baseUrl = "https://192.168.43.66"
+    private val baseUrl = "https://192.168.43.66" //https://139.59.178.208
 
     @Provides
     @Singleton

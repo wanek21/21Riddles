@@ -10,6 +10,7 @@ import martian.riddles.dto.Leaders
 import martian.riddles.dto.RegisterUser
 import martian.riddles.dto.RegisterUser.StatusCode
 import martian.riddles.util.Resource
+import martian.riddles.util.UpdateType
 import martian.riddles.util.log
 import javax.inject.Inject
 
@@ -120,6 +121,27 @@ class WebService @Inject constructor(
                 if(this.data != null) {
                     result = Resource.success(this.data!!.string())
                     log("check answer result: " + result.data!!)
+                }
+            }
+            suspendOnError { result = Resource.error(R.string.error_on_server, null) }
+            suspendOnFailure { result = Resource.error(R.string.connection_error, null) }
+        }
+
+        return result
+    }
+
+    suspend fun checkAppVersion(version: Int): Resource<UpdateType> {
+        var result: Resource<UpdateType> = Resource.error(R.string.unknown_error, null)
+
+        val serverResponse = serverApi.checkUpdate(version)
+        with(serverResponse) {
+            suspendOnSuccess {
+                if(this.data != null) {
+                    result = when(this.data!!.resultCode) {
+                        5 -> Resource.success(UpdateType.SOFT_UPDATE)
+                        6 -> Resource.success(UpdateType.FORCE_UPDATE)
+                        else -> Resource.success(UpdateType.CURRENT)
+                    }
                 }
             }
             suspendOnError { result = Resource.error(R.string.error_on_server, null) }

@@ -136,7 +136,7 @@
     <string name="action_settings">Settings</string>
     <string name="older_version">" This version of the app is not relevant, you can upgrade"</string>
     <string name="current_version">You are using the current version</string>
-    <string name="there_is_no_telegram"></string>
+    <string name="there_is_no_telegram">It seems that you have no Telegram installed. Install it?</string>
     <string name="install_telegram_btn">Install</string>
     <string name="telegram_chanel">Telegram channel for news and other</string>
     <string name="offer_review">Your feedback is very important, let me know what i can improve, fix or add</string>

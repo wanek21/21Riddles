@@ -10,7 +10,7 @@ interface ServerApi {
 
     // проверка обновлений приложения
     @GET("/updates/")
-    suspend fun checkUpdate(@Query("version") versionCode: Int): Call<ResponseFromServer?>?
+    suspend fun checkUpdate(@Query("version") versionCode: Int): ApiResponse<StandardResponse>
 
     // получение приза
     @Headers("User-Agent: dont touch")
