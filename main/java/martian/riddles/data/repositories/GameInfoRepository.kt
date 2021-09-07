@@ -21,7 +21,7 @@ class GameInfoRepository @Inject constructor(
     suspend fun getPrize(locale: String): Resource<String> {
         return withContext(Dispatchers.IO) {
             var prize = sharedPreferences.getString(DataKeys.PRIZE.key, "100")
-            log( "saved prize: $prize")
+            //log( "saved prize: $prize")
             refreshPrize(locale)
             Resource.success(prize)
         }

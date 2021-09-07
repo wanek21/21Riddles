@@ -1,6 +1,5 @@
 package martian.riddles.ui
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,12 +12,10 @@ import martian.riddles.data.repositories.GameInfoRepository
 import martian.riddles.data.repositories.UsersRepository
 import martian.riddles.dto.Leaders
 import martian.riddles.util.Resource
-import martian.riddles.util.SingleLiveEvent
 import martian.riddles.util.Status
 import martian.riddles.util.log
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
@@ -35,17 +32,17 @@ class MainActivityViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             repeat(1000) {
-                log("repeat leaders update")
+                //log("repeat leaders update")
                 val leaders = usersRepository.getLeaders()
                 //log("received leaders")
                 if(leaders.status == Status.SUCCESS) {
                     //log( "leaders received successfully")
-                    _leaders.value = leaders
+                    _leaders.postValue(leaders)
                 } else {
                     //log("error leaders")
                 }
 
-                _prize.value = gameInfoRepository.getPrize(Locale.getDefault().language)
+                _prize.postValue(gameInfoRepository.getPrize(Locale.getDefault().language))
                 delay(5000L)
             }
         }
@@ -67,7 +64,7 @@ class MainActivityViewModel @Inject constructor(
         gameInfoRepository.upCountLaunchApp()
     }
 
-    fun getCountCountLaunch(): Int {
+    fun getCountLaunch(): Int {
         return gameInfoRepository.getCountLaunchApp()
     }
 }

@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 import martian.riddles.data.local.DataKeys
 import martian.riddles.data.local.UsersDao
 import martian.riddles.data.remote.WebService
+import martian.riddles.domain.AttemptsController
 import martian.riddles.dto.Leaders
 import martian.riddles.dto.RegisterUser
 import martian.riddles.util.Resource
@@ -37,30 +38,11 @@ class UsersRepository @Inject constructor(
         }
     }
 
-    fun getMyNickname(): String {
-        val nickname = sharedPreferences.getString(DataKeys.NICKNAME.key, "")
-        return nickname ?: ""
-    }
-
-    fun getMyLevel(): Int {
-        return sharedPreferences.getInt(DataKeys.LEVEL.key, 0)
-    }
-
-    fun getMyToken(): String {
-        return sharedPreferences.getString(DataKeys.TOKEN.key, "") ?: ""
-    }
-
-    fun upMyLevel() { // увеличить уровень на 1
-        val currentLevel = sharedPreferences.getInt(DataKeys.LEVEL.key, 0)
-        editSharedPreferences.putInt(DataKeys.LEVEL.key, (currentLevel+1))
-        editSharedPreferences.commit()
-    }
-
     suspend fun getLeaders(): Resource<ArrayList<Leaders>> {
         return withContext(Dispatchers.IO) {
-            log( "before dao getting leaders")
+            //log( "before dao getting leaders")
             val leadersDao = usersDao.getLeaders()
-            log( "after dao getting leaders")
+            //log( "after dao getting leaders")
             refreshLeaders()
             Resource.success(Leaders.fromDao(leadersDao))
         }
@@ -69,16 +51,52 @@ class UsersRepository @Inject constructor(
     private suspend fun refreshLeaders() {
         val leaders = webService.getLeaders()
         if(leaders.status == Status.SUCCESS) {
-            log( "before transform")
+            //log( "before transform")
             val leadersDao = Leaders.toDao(leaders.data)
             usersDao.saveLeaders(leadersDao)
-            log( "after dao saving")
+            //log( "after dao saving")
         }
     }
 
     fun isLogged(): Boolean {
         val nickname = sharedPreferences.getString(DataKeys.NICKNAME.key,"")
-        //log( "nick check: $nickname")
         return (nickname?.isNotEmpty() == true)
+    }
+
+    fun getMyNickname(): String {
+        val nickname = sharedPreferences.getString(DataKeys.NICKNAME.key, "")
+        return nickname ?: ""
+    }
+
+    fun getMyLevel(): Int {
+        return sharedPreferences.getInt(DataKeys.LEVEL.key, 1)
+    }
+
+    fun getMyToken(): String {
+        return sharedPreferences.getString(DataKeys.TOKEN.key, "") ?: ""
+    }
+
+    fun upMyLevel() { // увеличить уровень на 1
+        val currentLevel = sharedPreferences.getInt(DataKeys.LEVEL.key, 1)
+        editSharedPreferences.putInt(DataKeys.LEVEL.key, (currentLevel+1))
+        editSharedPreferences.commit()
+    }
+
+    fun getMyCountAttempts(): Int {
+        return sharedPreferences.getInt(DataKeys.COUNT_ATTEMPTS.key, AttemptsController.DEFAULT_COUNT_ATTEMPTS)
+    }
+
+    fun changeMyCountAttempts(count: Int) {
+        editSharedPreferences.putInt(DataKeys.COUNT_ATTEMPTS.key, count)
+        editSharedPreferences.commit()
+    }
+
+    fun getMyCountWrongAnswers(): Int {
+        return sharedPreferences.getInt(DataKeys.COUNT_WRONG_ANSWERS.key, 0)
+    }
+
+    fun changeMyCountWrongAnswers(count: Int) {
+        editSharedPreferences.putInt(DataKeys.COUNT_WRONG_ANSWERS.key, count)
+        editSharedPreferences.commit()
     }
 }

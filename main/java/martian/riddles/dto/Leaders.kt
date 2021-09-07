@@ -1,6 +1,5 @@
 package martian.riddles.dto
 
-import android.util.Log
 import martian.riddles.data.local.Leader
 import martian.riddles.util.log
 
@@ -48,7 +47,7 @@ data class Leaders(
                     )
                 }
             }
-            log( "toDao: $resultLeaders")
+            //log( "toDao: $resultLeaders")
             return resultLeaders
         }
     }

@@ -1,6 +1,7 @@
 package martian.riddles.ui
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.view.View
@@ -38,9 +39,9 @@ class SignUpActivity : AppCompatActivity() {
             Status.SUCCESS -> {
                 btnSignUp?.isClickable = true
                 log("go to main activity")
-                /*val mainActivityIntent = Intent(this, MainActivity::class.java)
+                val mainActivityIntent = Intent(this, MainActivity::class.java)
                 startActivity(mainActivityIntent)
-                finish()*/
+                finish()
             }
             Status.LOADING -> {
                 btnSignUp?.isClickable = false

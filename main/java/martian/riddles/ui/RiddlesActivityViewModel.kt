@@ -7,20 +7,18 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import martian.riddles.data.repositories.RiddlesRepository
 import martian.riddles.data.repositories.UsersRepository
 import martian.riddles.domain.AttemptsController
-import martian.riddles.domain.PurchaseController
 import martian.riddles.domain.RiddlesController
-import martian.riddles.dto.GetRiddle
 import martian.riddles.util.Resource
+import okhttp3.internal.userAgent
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class RiddlesActivityViewModel @Inject constructor(
+    private val usersRepository: UsersRepository,
     private val riddlesController: RiddlesController,
-    private val purchaseController: PurchaseController, // для работы с покупкой беск. попыток
     private val attemptsController: AttemptsController // контроллер попыток
 ) : ViewModel() {
 
@@ -30,26 +28,56 @@ class RiddlesActivityViewModel @Inject constructor(
     private val _riddle: MutableLiveData<Resource<String>> = MutableLiveData()
     val riddle: LiveData<Resource<String>> = _riddle
 
-    init {
-
-    }
-
     fun getCurrentRiddle() {
         viewModelScope.launch(Dispatchers.IO) {
-            /*val language = Locale.getDefault().language
-            val token = usersRepository.getMyToken()
-            val nickname = usersRepository.getMyNickname()
-            val level = usersRepository.getMyLevel()
-            var getRiddle = GetRiddle(token, nickname, locale = language, false)
-            riddlesRepository.getCurrentRiddle(getRiddle, currentLevel = level).data ?: "Error"*/
-            _riddle.value = riddlesController.getRiddle()
+            _riddle.postValue(riddlesController.getRiddle())
         }
     }
 
     fun checkAnswer(answer: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _answerStatus.value = riddlesController.checkAnswer(answer)
+            _answerStatus.postValue(riddlesController.checkAnswer(answer))
         }
+    }
+
+    fun getMyLevel(): Int {
+        return usersRepository.getMyLevel()
+    }
+
+    fun getCountAttempts(): Int {
+        return attemptsController.getCountAttempts()
+    }
+
+    fun isEndlessAttempts(): Boolean {
+        return attemptsController.isEndlessAttempts
+    }
+
+    fun setEndlessAttempts() {
+        attemptsController.isEndlessAttempts = true
+    }
+
+    fun resetCountAttempts() {
+        attemptsController.resetCountAttempts()
+    }
+
+    fun downCountAttempts() {
+        attemptsController.downCountAttempts()
+    }
+
+    fun upCountAttempts() {
+        attemptsController.upCountAttempts()
+    }
+
+    fun getCountWrongAnswers(): Int {
+        return attemptsController.getCountWrongAnswers()
+    }
+
+    fun upCountWrongAnswers() {
+        attemptsController.upCountWrongAnswers()
+    }
+
+    fun resetCountWrongAnswers() {
+        attemptsController.resetCountWrongAnswers()
     }
 
 }

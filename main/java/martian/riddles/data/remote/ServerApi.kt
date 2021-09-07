@@ -10,7 +10,7 @@ interface ServerApi {
 
     // проверка обновлений приложения
     @GET("/updates/")
-    fun checkUpdate(@Query("version") versionCode: Int): Call<ResponseFromServer?>?
+    suspend fun checkUpdate(@Query("version") versionCode: Int): Call<ResponseFromServer?>?
 
     // получение приза
     @Headers("User-Agent: dont touch")
@@ -28,7 +28,7 @@ interface ServerApi {
 
     // узнать место игрока по нику
     @POST("/users/place/")
-    fun getPlace(@Body getPlace: GetPlace?): Call<ResponseBody?>?
+    suspend fun getPlace(@Body getPlace: GetPlace?): ApiResponse<ResponseBody>
 
     // получение загадки
     @Headers("User-Agent: dont touch")
@@ -38,9 +38,9 @@ interface ServerApi {
     // получение email
     @Headers("User-Agent: dont touch")
     @POST("/main/email/")
-    fun getEmail(@Body getEmail: GetEmail?): Call<ResponseBody?>?
+    suspend fun getEmail(@Body getEmail: GetEmail?): ApiResponse<ResponseBody>
 
     // проверка ответа
     @POST("/riddles/answer/")
-    fun checkAnswer(@Body checkAnswer: CheckAnswer?): ApiResponse<ResponseBody>
+    suspend fun checkAnswer(@Body checkAnswer: CheckAnswer?): ApiResponse<ResponseBody>
 }

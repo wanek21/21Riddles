@@ -146,7 +146,7 @@ public class DoneActivity extends AppCompatActivity { // активити поя
             GetPlace getPlace = new GetPlace();
             getPlace.setNickname(Player.getInstance().getName());
             getPlace.setToken(Player.getInstance().getToken());
-            try {
+            /*try {
                 ResponseBody responseBody = RequestController.Companion // получем приз
                         .getInstance()
                         .getApiService(GetContextClass.getContext())
@@ -156,7 +156,7 @@ public class DoneActivity extends AppCompatActivity { // активити поя
                 else return Integer.parseInt(responseBody.string());
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
             return null;
         }
 
@@ -176,7 +176,7 @@ public class DoneActivity extends AppCompatActivity { // активити поя
         @Override
         protected String doInBackground(Void... voids) {
             while(true) {
-                try {
+                /*try {
                     GetEmail getEmail = new GetEmail();
                     getEmail.setNickname(Player.getInstance().getName());
                     getEmail.setToken(Player.getInstance().getToken());
@@ -197,7 +197,7 @@ public class DoneActivity extends AppCompatActivity { // активити поя
                         ex.printStackTrace();
                     }
                     continue;
-                }
+                }*/
             }
         }
 

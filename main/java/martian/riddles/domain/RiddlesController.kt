@@ -1,12 +1,9 @@
 package martian.riddles.domain
 
-import martian.riddles.data.remote.RequestController.Companion.hasConnection
 import martian.riddles.data.repositories.RiddlesRepository
 import martian.riddles.data.repositories.UsersRepository
 import martian.riddles.dto.CheckAnswer
 import martian.riddles.dto.GetRiddle
-import martian.riddles.exceptions.NoInternetException
-import martian.riddles.util.GetContextClass
 import martian.riddles.util.Resource
 import martian.riddles.util.Status
 import java.util.*
@@ -14,29 +11,38 @@ import javax.inject.Inject
 
 class RiddlesController @Inject constructor(
     private val usersRepository: UsersRepository,
-    private val riddlesRepository: RiddlesRepository
+    private val riddlesRepository: RiddlesRepository,
+    private val attemptsController: AttemptsController
 ) {
 
-    private val locale: String
-
-    suspend fun checkAnswer(answer: String): Resource<Boolean> {
-        var answer = answer
-        answer = answer.trim { it <= ' ' }.lowercase()
+    suspend fun checkAnswer(asw: String): Resource<Boolean> {
+        val answer = asw.trim { it <= ' ' }.lowercase()
         val currentLevel = usersRepository.getMyLevel()
-        return if (hasConnection(GetContextClass.getContext())) {
-            val isRight: Boolean
-            val checkAnswer = CheckAnswer()
-            checkAnswer.nickname = usersRepository.getMyNickname()
-            checkAnswer.token = usersRepository.getMyToken()
-            checkAnswer.answer = answer
-            val response = riddlesRepository.checkAnswer(checkAnswer)
-            if(response.status == Status.ERROR) Resource.error(response.message!!, null)
-            isRight = response.data.toString() == "1"
-            if (isRight) {
-                riddlesRepository.replaceCurrentRiddle(currentLevel)
+        val isAnswerRight: Boolean
+        val checkAnswer = CheckAnswer()
+        checkAnswer.nickname = usersRepository.getMyNickname()
+        checkAnswer.token = usersRepository.getMyToken()
+        checkAnswer.answer = answer
+
+        val response = riddlesRepository.checkAnswer(checkAnswer)
+        if(response.status == Status.ERROR)
+            return Resource.error(response.message!!, null)
+
+        // бэк возвращает либо 0 либо 1
+        isAnswerRight = response.data.toString() == "1"
+        if (isAnswerRight) {
+            attemptsController.resetCountAttempts()
+            attemptsController.resetCountWrongAnswers()
+            usersRepository.upMyLevel()
+            riddlesRepository.replaceCurrentRiddle(currentLevel)
+        } else {
+            val countAttempts = attemptsController.getCountAttempts()
+            if (countAttempts > 0 && !attemptsController.isEndlessAttempts) {
+                attemptsController.downCountAttempts()
             }
-            Resource.success(isRight)
-        } else throw NoInternetException()
+            attemptsController.upCountWrongAnswers()
+        }
+        return Resource.success(isAnswerRight)
     }
 
     suspend fun getRiddle(): Resource<String> {
@@ -44,7 +50,7 @@ class RiddlesController @Inject constructor(
             val token = usersRepository.getMyToken()
             val nickname = usersRepository.getMyNickname()
             val language = Locale.getDefault().language
-            var getRiddle = GetRiddle(token, nickname, locale = language, false)
+            val getRiddle = GetRiddle(token, nickname, locale = language, false)
 
             return riddlesRepository.getCurrentRiddle(getRiddle, level)
         }
@@ -56,7 +62,4 @@ class RiddlesController @Inject constructor(
         const val ERROR_LOAD_RIDDLE = "error_riddle"
     }
 
-    init {
-        locale = Locale.getDefault().language
-    }
 }

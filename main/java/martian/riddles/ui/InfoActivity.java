@@ -111,7 +111,7 @@ public class InfoActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            try {
+            /*try {
                 ResponseFromServer responseFromServer = RequestController.Companion
                         .getInstance()
                         .getApiService(InfoActivity.this)
@@ -123,7 +123,7 @@ public class InfoActivity extends AppCompatActivity {
                 }
             } catch (IOException e) {
                 return false;
-            }
+            }*/
             return false;
         }
 

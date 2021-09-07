@@ -6,7 +6,6 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -68,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         when (it.status) {
             Status.SUCCESS -> {
                 val prize = it.data + " " + getString(R.string.currency_locale);
-                log( "mainactivity prize: $prize")
+                //log( "mainactivity prize: $prize")
                 tvPrize?.text = prize
             }
         }
@@ -91,6 +90,7 @@ class MainActivity : AppCompatActivity() {
         tvName?.text = viewModel.getNickname()
         imgBackLevel = findViewById(R.id.imgBackLevel)
         tvLevel = findViewById(R.id.tvLevel)
+        tvLevel?.text = viewModel.getLevel().toString()
         btnNext = findViewById(R.id.btnNext)
         btnHelp = findViewById(R.id.btnHelp)
         tvPrize = findViewById(R.id.tvPrize)
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
         levelController = LevelController()
 
-        if (viewModel.getCountCountLaunch() == 2) { // доп. анимации и подсказки, если запуск первый
+        if (viewModel.getCountLaunch() == 2) { // доп. анимации и подсказки, если запуск первый
             ViewTooltip
                 .on(this, btnHelp)
                 .autoHide(true, 5000)
@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity() {
                 val intent: Intent?
                 if (viewModel.getLevel() < 22) {
                     intent = Intent(this@MainActivity, RiddlesActivity::class.java)
-                    intent.putExtra("past_level", Player.getInstance().level)
+                    intent.putExtra("past_level", viewModel.getLevel())
                 } else if (viewModel.getLevel() == 22) {
                     intent = Intent(this@MainActivity, DoneActivity::class.java)
                 } else intent = null
@@ -209,7 +209,7 @@ class MainActivity : AppCompatActivity() {
 
     //---------------------------------------------------------------------------------------------------------------
 
-    // для управления уровнем
+    // для управления полоской уровня
     private inner class LevelController {
 
         // "блоки" одного уровня
@@ -250,13 +250,13 @@ class MainActivity : AppCompatActivity() {
 
         fun initLevel(isFirstTime: Boolean) {
             var isComplete = false
-            var currentLevel = Player.getInstance().level
+            var currentLevel = viewModel.getLevel()
             if (currentLevel == 22) {
                 currentLevel = 21
                 isComplete = true
             }
             if (isFirstTime) { // если игрок только что прошел все уровни, то готовим особую анимацию
-                tvLevel!!.alpha = 0f
+                tvLevel?.alpha = 0f
                 for (i in 0..20) {
                     blockShow = ObjectAnimator.ofFloat(levelBlocks[i], "alpha", 1f, 0f)
                     blockScaleX = ObjectAnimator.ofFloat(levelBlocks[i], "scaleX", 1f, 0f)
@@ -298,8 +298,8 @@ class MainActivity : AppCompatActivity() {
             }
             if (viewModel.getLevel() < 22) {
                 val level =
-                    Player.getInstance().level.toString() + " " + resources.getString(R.string.level)
-                tvLevel!!.text = level
+                    viewModel.getLevel().toString() + " " + resources.getString(R.string.level)
+                tvLevel?.text = level
             } else {
                 tvLevel!!.setText(R.string.complete_level)
                 tvLevel!!.setTextColor(resources.getColor(R.color.rightAnswer))
@@ -319,9 +319,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         fun increaseLevel(differLevel: Int) {
-            tvLevel!!.text = viewModel.getLevel().toString() + " " + getString(R.string.level)
+            tvLevel?.text = viewModel.getLevel().toString() + " " + getString(R.string.level)
             if (differLevel > 0) {
-                val currentLevel = Player.getInstance().level
+                val currentLevel = viewModel.getLevel()
                 val pastLevel = currentLevel - differLevel
                 val isComplete = currentLevel == 22
                 var i = pastLevel - 1

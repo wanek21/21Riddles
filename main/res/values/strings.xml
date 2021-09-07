@@ -153,5 +153,7 @@
     <string name="players5_10">others</string>
     <string name="error_on_server">Error on server</string>
     <string name="connection_error">Connection error. Something with internet</string>
+    <string name="error_during_load_riddle">Error loading the riddle</string>
+    <string name="error_during_checking_answer">Error checking answer</string>
 
 </resources>

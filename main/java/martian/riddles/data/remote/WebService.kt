@@ -62,7 +62,7 @@ class WebService @Inject constructor(
         with(response) {
             suspendOnSuccess {
                 if (this.data != null) {
-                    log("webService: leaders received")
+                    //log("webService: leaders received")
                     result = Resource.success(this.data)
                 }
             }
@@ -82,7 +82,7 @@ class WebService @Inject constructor(
             suspendOnSuccess {
                 if (this.data != null) {
                     result = Resource.success(this.data!!.prize)
-                    log("webService prize: ${result.data}")
+                    //log("webService prize: ${result.data}")
                 }
             }
             suspendOnError { result = Resource.error(R.string.error_on_server, null) }
@@ -96,11 +96,12 @@ class WebService @Inject constructor(
         var result: Resource<String> = Resource.error(R.string.unknown_error, null)
 
         val response = serverApi.getRiddle(getRiddle)
+        log("webService: ${getRiddle.next}")
         with(response) {
             suspendOnSuccess {
                 if (this.data != null) {
                     result = Resource.success(this.data!!.riddle)
-                    log("webService riddle: ${result.data}")
+                    log("webService getting riddle: ${result.data}")
                 }
             }
             suspendOnError { result = Resource.error(R.string.error_on_server, null) }
@@ -118,7 +119,7 @@ class WebService @Inject constructor(
             suspendOnSuccess {
                 if(this.data != null) {
                     result = Resource.success(this.data!!.string())
-                    log(result.data!!)
+                    log("check answer result: " + result.data!!)
                 }
             }
             suspendOnError { result = Resource.error(R.string.error_on_server, null) }

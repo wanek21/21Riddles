@@ -1,14 +1,15 @@
 package martian.riddles.ui
 
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Point
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
+import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.View.OnFocusChangeListener
@@ -23,22 +24,24 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import dagger.hilt.android.AndroidEntryPoint
 import martian.riddles.R
+import martian.riddles.data.local.StoredData
 import martian.riddles.domain.*
-import martian.riddles.dto.Player
-import martian.riddles.util.GetContextClass
+import martian.riddles.util.Status
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 // активити, где отображаются загадки
+@AndroidEntryPoint
 class RiddlesActivity : AppCompatActivity() {
 
     var rewardedAd: RewardedAd? = null
-    private var tvQuestion: TextView? = null
-    private var tvTopLvl: TextView? = null
-    private var tvBottomLvl: TextView? = null
+    private var tvRiddle: TextView? = null
+    private var tvTopLvl: TextView? = null // следующий уровень, будет "вылазить" сверху при анимации
+    private var tvBottomLvl: TextView? = null // текущий уровень
     private var etAnswer: EditText? = null
-    private var btnNext: Button? = null
+    private var btnNextRiddle: Button? = null
     private var btnCheckAnswer: Button? = null
     private var progressAdLoad: ProgressBar? = null
     private var answerStateImg: ImageView? = null
@@ -51,11 +54,11 @@ class RiddlesActivity : AppCompatActivity() {
     private var btnBuy: Button? = null
     //private val riddlesController = RiddlesController()
     //private var statisticsController: StatisticsController? = null
+    //private var attemptsController: AttemptsController? = null
     private var handler: Handler? = null
+    private var purchaseController: PurchaseController? = null
     private var answerInputAnimation: Handler? = null
     private var animationController: AnimationController? = null
-    private var attemptsController: AttemptsController? = null
-    private var purchaseController: PurchaseController? = null
     var fullScreenContentCallback: FullScreenContentCallback? = null
     private val ALPHA_DOWN = 1
     private val ALPHA_UP = 2
@@ -76,17 +79,18 @@ class RiddlesActivity : AppCompatActivity() {
     private val WRONG_ANSWER = 23
     private var adBlockId: String? = null
     private var adShowed = false // если реклама показалась, то можно показывать предложение о покупке
+    val SHOW_PURCHASE_ATTEMPTS = 18 // кол-во неудачных попыток ответа, после которых показывается предложение о покупке
 
     private val viewModel: RiddlesActivityViewModel by lazy {
         ViewModelProvider(this).get(RiddlesActivityViewModel::class.java)
     }
 
-    @SuppressLint("HandlerLeak")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question)
+
         adBlockId = this.resources.getString(R.string.ad_block)
-        answerInputAnimation = object : Handler() {
+        answerInputAnimation = object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
                 super.handleMessage(msg)
                 when (msg.what) {
@@ -94,86 +98,74 @@ class RiddlesActivity : AppCompatActivity() {
                         answerStateImg!!.setImageDrawable(getDrawable(R.drawable.norm_to_right))
                         animationController!!.INPUT_STATE = 0
                     }
-                    RIGHT_ANSWER -> {
-                        animationController?.editTextRightAnswer()
-                        animationController?.animationBtnNext()
-                        animationController?.markAnimate()
-                        btnCheckAnswer?.isClickable = false
-                    }
-                    WRONG_ANSWER -> {
-                        animationController!!.editTextWrongAnswer()
-                        etAnswer!!.setText("")
-                    }
                     SET_RED_ANSWER -> {
-                        answerStateImg!!.setImageResource(R.drawable.bottom_img_wrong)
-                        animationController!!.INPUT_STATE = 2
+                        answerStateImg?.setImageResource(R.drawable.bottom_img_wrong)
+                        animationController?.INPUT_STATE = 2
                     }
                     TRANSITION_RESET -> {
-                        animationController!!.transitionInputReset()
+                        animationController?.transitionInputReset()
                     }
                 }
             }
         }
-        handler = object : Handler() {
+        handler = object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
                 super.handleMessage(msg)
                 when (msg.what) {
-                    ALPHA_DOWN -> tvQuestion!!.animate().alpha(0f).duration = 1000
-                    ALPHA_UP -> tvQuestion!!.animate().alpha(1f).duration = 1000
+                    ALPHA_DOWN -> tvRiddle?.animate()?.alpha(0f)?.duration = 1000
+                    ALPHA_UP -> tvRiddle?.animate()?.alpha(1f)?.duration = 1000
                     LOAD_AD -> {
                         loadAd()
                     }
                     CHANGE_ANSWER -> {
-                        //tvQuestion!!.text = riddlesController.riddle
+                        viewModel.getCurrentRiddle()
                     }
                     CHANGE_HINT_ANSWER -> {
-                        if (!attemptsController!!.isEndlessAttempts) {
-                            /*val countAttempts = attemptsController!!.countAttempts
-                            if (countAttempts > 0 && countAttempts <= 3) {
-                                etAnswer!!.hint =
+                        if (!viewModel.isEndlessAttempts()) {
+                            val countAttempts = viewModel.getCountAttempts()
+                            if (countAttempts in 1..3) {
+                                etAnswer?.hint =
                                     resources.getString(R.string.attempts) + " " + countAttempts
-                                btnCheckAnswer!!.maxLines = 1
-                                btnCheckAnswer!!.setText(R.string.check_answer)
+                                btnCheckAnswer?.maxLines = 1
+                                btnCheckAnswer?.setText(R.string.check_answer)
                             } else if (countAttempts == 0) {
-                                etAnswer!!.hint =
+                                etAnswer?.hint =
                                     resources.getString(R.string.attempts) + " " + countAttempts
-                                btnCheckAnswer!!.maxLines = 2
-                                btnCheckAnswer!!.setText(R.string.look_ad)
-                            }*/
+                                btnCheckAnswer?.maxLines = 2
+                                btnCheckAnswer?.setText(R.string.look_ad)
+                            }
                         } else {
-                            etAnswer!!.hint = ""
+                            etAnswer?.hint = ""
                         }
                     }
                     ALPHA_DOWN_BTNNEXT -> {
-                        btnNext!!.animate().alpha(0f).duration = 400
+                        btnNextRiddle?.animate()?.alpha(0f)?.duration = 400
                     }
                     SET_INVISIBLE_BTNNEXT -> {
-                        btnNext!!.visibility = View.INVISIBLE
+                        btnNextRiddle!!.visibility = View.INVISIBLE
                     }
                     SHOW_PROGRESS -> {
-                        animationController!!.showProgressBarAd()
+                        animationController?.showProgressBarAd()
                     }
                     HIDE_PROGRESS -> {
-                        animationController!!.hideProgressBarAd()
+                        animationController?.hideProgressBarAd()
                     }
                     SHOW_PURCHASE -> {
-                        animationController!!.showPurchase()
+                        animationController?.showPurchase()
                     }
                     HIDE_PURCHASE -> {
-                        animationController!!.hidePurchase()
-                    }
-                    SHOW_PARTING_WORD -> {
+                        animationController?.hidePurchase()
                     }
                 }
             }
         }
-        tvQuestion = findViewById(R.id.tvQuestion)
+        tvRiddle = findViewById(R.id.tvQuestion)
         tvTopLvl = findViewById(R.id.tvTop)
         tvBottomLvl = findViewById(R.id.tvBottom)
         imgGreenMark = findViewById(R.id.imgGreenMark)
         answerStateImg = findViewById(R.id.imgAnswerAnimation)
         etAnswer = findViewById(R.id.etAnswer)
-        btnNext = findViewById(R.id.btnNextQuestion)
+        btnNextRiddle = findViewById(R.id.btnNextQuestion)
         progressAdLoad = findViewById(R.id.progressLoadAd)
         btnCheckAnswer = findViewById(R.id.btnCheckAnswer)
         imgBackToMain = findViewById(R.id.imgBackToMain)
@@ -182,15 +174,69 @@ class RiddlesActivity : AppCompatActivity() {
         mlBottom = findViewById(R.id.mlCheckAndNext)
         imgShowBuy = findViewById(R.id.imgShowBuy)
         btnBuy = findViewById(R.id.btnBuy)
-        btnBuy?.setOnClickListener { purchaseController!!.buy() }
-        btnNext?.setOnClickListener(onClickListener)
+        btnBuy?.setOnClickListener { purchaseController?.buy() }
+        btnNextRiddle?.setOnClickListener(onClickListener)
         btnCheckAnswer?.setOnClickListener(onClickListener)
         imgBackToMain?.setOnClickListener(onClickListener)
+
         etAnswer?.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 animationController!!.focusEditText()
             }
         }
+        viewModel.riddle.observe(this, {
+            when(it.status) {
+                Status.SUCCESS -> {
+                    tvRiddle?.text = it.data
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, getString(R.string.error_during_load_riddle), Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+        viewModel.answerStatus.observe(this, {
+            when(it.status) {
+                Status.SUCCESS -> {
+                    if(it.data == true) { // если ответ правильный
+                        animationController?.editTextRightAnswer()
+                        animationController?.animationBtnNext()
+                        animationController?.markAnimate()
+                        btnCheckAnswer?.isClickable = false
+                    } else { // если ответ неправильный
+                        animationController?.editTextWrongAnswer()
+                        answerInputAnimation?.sendEmptyMessage(WRONG_ANSWER)
+                        etAnswer?.setText("")
+
+                        // показываем предложение о покупке, если потрачено достаточное кол-во попыток
+                        if (adShowed && !purchaseController!!.isPayComplete) {
+                            if (purchaseController?.countPurchaseOffer == 0) {
+                                handler?.sendEmptyMessage(SHOW_PURCHASE)
+                                purchaseController?.increaseCountPurchaseOffer()
+                            } else if (purchaseController!!.countPurchaseOffer == 1) {
+                                if (viewModel.getCountWrongAnswers() == SHOW_PURCHASE_ATTEMPTS) {
+                                    handler?.sendEmptyMessage(SHOW_PURCHASE)
+                                    purchaseController?.increaseCountPurchaseOffer()
+                                }
+                            }
+                        }
+                    }
+                    handler?.sendEmptyMessage(CHANGE_HINT_ANSWER)
+                }
+                Status.LOADING -> {
+                    btnCheckAnswer?.isClickable = false
+                }
+                Status.ERROR -> {
+                    Toast.makeText(
+                        this,
+                        getString(it.message ?: R.string.error_during_load_riddle),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    btnCheckAnswer?.isClickable = true
+                }
+            }
+        })
+        tvTopLvl?.text = (viewModel.getMyLevel()+1).toString()
+        tvBottomLvl?.text = viewModel.getMyLevel().toString()
         //statisticsController = StatisticsController(this)
         //purchaseController = PurchaseController(this)
         animationController = AnimationController()
@@ -198,20 +244,18 @@ class RiddlesActivity : AppCompatActivity() {
 
         // если юзер разгадал все, но не проверил является ли он победителем
         /*if (!StoredData.getDataBool(StoredData.DATA_WINNER_IS_CHECKED) && Progress.getInstance().level < 22) {
-            tvQuestion?.text = riddlesController.riddle
+            tvRiddle?.text = riddlesController.riddle
             tvTopLvl?.text = (Progress.getInstance().level + 1).toString()
             tvBottomLvl?.text = Progress.getInstance().level.toString()
         }*/
-        setInputMode() // если экран маленький, то макет поднимается при фокусе клавиатуры
+        setInputMode() // если экран маленький, то макет поднимается при появлении клавиатуры
         fullScreenContentCallback = object : FullScreenContentCallback() {
-            override fun onAdShowedFullScreenContent() {
-                // Code to be invoked when the ad showed full screen content.
-            }
+            override fun onAdShowedFullScreenContent() {}
 
+            // Code to be invoked when the ad dismissed full screen content.
             override fun onAdDismissedFullScreenContent() {
                 rewardedAd = null
                 loadAd()
-                // Code to be invoked when the ad dismissed full screen content.
             }
         }
         loadAd()
@@ -224,13 +268,13 @@ class RiddlesActivity : AppCompatActivity() {
             AdRequest.Builder().build(),
             object : RewardedAdLoadCallback() {
                 override fun onAdLoaded(ad: RewardedAd) {
-                    super.onAdLoaded(rewardedAd!!)
+                    //super.onAdLoaded(rewardedAd!!)
                     rewardedAd = ad
-                    rewardedAd!!.fullScreenContentCallback = fullScreenContentCallback
+                    rewardedAd?.fullScreenContentCallback = fullScreenContentCallback
                 }
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                    super.onAdFailedToLoad(loadAdError)
+                    //super.onAdFailedToLoad(loadAdError)
                     //statisticsController!!.sendErrorAd(loadAdError.code)
                     when (loadAdError.code) {
                         0 -> Toast.makeText(
@@ -239,7 +283,7 @@ class RiddlesActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG
                         ).show()
                         else -> Toast.makeText(
-                            GetContextClass.getContext(),
+                            this@RiddlesActivity,
                             R.string.error_download_ad,
                             Toast.LENGTH_SHORT
                         ).show()
@@ -249,29 +293,28 @@ class RiddlesActivity : AppCompatActivity() {
     }
 
     // показать рекламу, чтобы добавить попытку
-    val attemptByAd: Unit
-        get() {
-            if (rewardedAd != null) {
-                rewardedAd!!.show(
-                    this
-                ) {
-                    Toast.makeText(
-                        this@RiddlesActivity,
-                        R.string.attempt_is_added,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    attemptsController!!.upCountAttempts()
-                    adShowed = true
-                }
-            } else {
+    private fun getAttemptByAd() {
+        if (rewardedAd != null) {
+            rewardedAd!!.show(
+                this
+            ) {
                 Toast.makeText(
                     this@RiddlesActivity,
-                    getText(R.string.ad_not_ready_yet), Toast.LENGTH_SHORT
+                    R.string.attempt_is_added,
+                    Toast.LENGTH_SHORT
                 ).show()
+                viewModel.upCountAttempts()
+                adShowed = true
             }
+        } else {
+            Toast.makeText(
+                this@RiddlesActivity,
+                getText(R.string.ad_not_ready_yet), Toast.LENGTH_SHORT
+            ).show()
         }
+    }
     private val widthScreen: Int
-        private get() {
+        get() {
             val display = windowManager.defaultDisplay
             val size = Point()
             display.getSize(size)
@@ -288,11 +331,8 @@ class RiddlesActivity : AppCompatActivity() {
 
     public override fun onResume() {
         super.onResume()
-        //animationController?.setAttemptsOnScreen()
+        animationController?.setAttemptsOnScreen()
         viewModel.getCurrentRiddle()
-        if (Player.getInstance().level > 9) {
-            //LoadRiddle().execute()
-        }
     }
 
     public override fun onPause() {
@@ -306,7 +346,7 @@ class RiddlesActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val pastLevel = intent.getIntExtra("past_level", 1)
         val intentMain = Intent()
-        intentMain.putExtra("differ_level", Progress.getInstance().level - pastLevel)
+        intentMain.putExtra("differ_level", viewModel.getMyLevel() - pastLevel)
         try {
             setResult(RESULT_OK, intentMain)
             finish()
@@ -315,23 +355,24 @@ class RiddlesActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun changeQuestion() {
+    private fun changeRiddle() {
         // анимация вопроса
+
         Thread {
-            handler!!.sendEmptyMessage(ALPHA_DOWN)
+            handler?.sendEmptyMessage(ALPHA_DOWN)
             try {
                 Thread.sleep(1000)
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
-            handler!!.sendEmptyMessage(CHANGE_ANSWER)
-            answerInputAnimation!!.sendEmptyMessage(TRANSITION_RESET) // сбрасываем transition, чтобы запустить потом снова
-            handler!!.sendEmptyMessage(ALPHA_UP)
+            handler?.sendEmptyMessage(CHANGE_ANSWER)
+            answerInputAnimation?.sendEmptyMessage(TRANSITION_RESET) // сбрасываем transition, чтобы запустить потом снова
+            handler?.sendEmptyMessage(ALPHA_UP)
         }.start()
-        animationController!!.changeQuestion()
-        animationController!!.changeLevelTop()
-        btnCheckAnswer!!.isClickable = true
-        etAnswer!!.setText("")
+        animationController?.changeRiddle()
+        animationController?.changeLevelTop()
+        btnCheckAnswer?.isClickable = true
+        etAnswer?.setText("")
     }
 
     // внутренние контроллеры и потоки -----------------------------------------------------------------------------
@@ -349,22 +390,22 @@ class RiddlesActivity : AppCompatActivity() {
         private var answerTransitions: TransitionDrawable? = null
 
         fun setAttemptsOnScreen() {
-            /*val countAttempts = attemptsController!!.countAttempts
-            if (attemptsController!!.isEndlessAttempts) {
-                btnCheckAnswer!!.maxLines = 1
-                btnCheckAnswer!!.setText(R.string.check_answer)
-                imgShowBuy!!.isClickable = false
-                imgShowBuy!!.alpha = 0f
-                etAnswer!!.hint = ""
+            val countAttempts = viewModel.getCountAttempts()
+            if (viewModel.isEndlessAttempts()) {
+                btnCheckAnswer?.maxLines = 1
+                btnCheckAnswer?.setText(R.string.check_answer)
+                imgShowBuy?.isClickable = false
+                imgShowBuy?.alpha = 0f
+                etAnswer?.hint = ""
             } else if (countAttempts == 0) {
-                btnCheckAnswer!!.maxLines = 2
-                btnCheckAnswer!!.setText(R.string.look_ad)
-                etAnswer!!.hint = resources.getString(R.string.attempts) + " " + countAttempts
+                btnCheckAnswer?.maxLines = 2
+                btnCheckAnswer?.setText(R.string.look_ad)
+                etAnswer?.hint = resources.getString(R.string.attempts) + " " + countAttempts
             } else if (countAttempts <= 3) {
-                btnCheckAnswer!!.maxLines = 1
-                btnCheckAnswer!!.setText(R.string.check_answer)
-                etAnswer!!.hint = resources.getString(R.string.attempts) + " " + countAttempts
-            }*/
+                btnCheckAnswer?.maxLines = 1
+                btnCheckAnswer?.setText(R.string.check_answer)
+                etAnswer?.hint = resources.getString(R.string.attempts) + " " + countAttempts
+            }
         }
 
         fun focusEditText() {
@@ -382,13 +423,13 @@ class RiddlesActivity : AppCompatActivity() {
             }.start()
         }
 
-        fun changeQuestion() {
-            answerTransitions!!.reverseTransition(500)
-            mlMain!!.transitionToStart()
+        fun changeRiddle() {
+            answerTransitions?.reverseTransition(500)
+            mlMain?.transitionToStart()
         }
 
         fun markAnimate() {
-            mlMain!!.transitionToEnd()
+            mlMain?.transitionToEnd()
             val drawable = imgGreenMark!!.drawable
             if (drawable is Animatable) {
                 (drawable as Animatable).start()
@@ -396,15 +437,15 @@ class RiddlesActivity : AppCompatActivity() {
         }
 
         fun showPurchase() {
-            mlBottom!!.transitionToEnd()
+            mlBottom?.transitionToEnd()
         }
 
         fun hidePurchase() {
-            mlBottom!!.transitionToStart()
+            mlBottom?.transitionToStart()
         }
 
         fun changeLevelTop() {
-            mlLevel!!.setTransitionListener(object : MotionLayout.TransitionListener {
+            mlLevel?.setTransitionListener(object : MotionLayout.TransitionListener {
                 override fun onTransitionStarted(motionLayout: MotionLayout, i: Int, i1: Int) {}
                 override fun onTransitionChange(
                     motionLayout: MotionLayout,
@@ -416,7 +457,7 @@ class RiddlesActivity : AppCompatActivity() {
 
                 override fun onTransitionCompleted(motionLayout: MotionLayout, i: Int) {
                     if (i == R.id.end) {
-                        tvBottomLvl!!.text = Progress.getInstance().level.toString()
+                        tvBottomLvl?.text = viewModel.getMyLevel().toString()
                         motionLayout.progress = 0f
                         motionLayout.setTransition(R.id.start, R.id.end)
                     }
@@ -430,25 +471,25 @@ class RiddlesActivity : AppCompatActivity() {
                 ) {
                 }
             })
-            tvTopLvl!!.text = Progress.getInstance().level.toString()
-            mlLevel!!.transitionToEnd()
+            tvTopLvl?.text = viewModel.getMyLevel().toString()
+            mlLevel?.transitionToEnd()
         }
 
         fun animationBtnNext(appear: Boolean) { // анимация появлеия кнопки "дальше"
             val animatorBtnNextX: ObjectAnimator
             val animatorBtnNextY: ObjectAnimator
             if (appear) {
-                btnNext!!.visibility = View.VISIBLE
-                btnNext!!.isClickable = true
-                btnNext!!.alpha = 1.0f
-                animatorBtnNextX = ObjectAnimator.ofFloat(btnNext, View.SCALE_X, 1.0f, 1.1f, 1.0f)
-                animatorBtnNextY = ObjectAnimator.ofFloat(btnNext, View.SCALE_Y, 1.0f, 1.1f, 1.0f)
+                btnNextRiddle?.visibility = View.VISIBLE
+                btnNextRiddle?.isClickable = true
+                btnNextRiddle?.alpha = 1.0f
+                animatorBtnNextX = ObjectAnimator.ofFloat(btnNextRiddle, View.SCALE_X, 1.0f, 1.1f, 1.0f)
+                animatorBtnNextY = ObjectAnimator.ofFloat(btnNextRiddle, View.SCALE_Y, 1.0f, 1.1f, 1.0f)
                 animatorBtnNextX.duration = 300
                 animatorBtnNextY.duration = 300
                 animatorBtnNextX.start()
             } else {
-                btnNext!!.isClickable = false
-                val btnNextAnimator = ObjectAnimator.ofFloat(btnNext, View.ALPHA, 1.0f, 0.0f)
+                btnNextRiddle?.isClickable = false
+                val btnNextAnimator = ObjectAnimator.ofFloat(btnNextRiddle, View.ALPHA, 1.0f, 0.0f)
                 btnNextAnimator.duration = 400
                 btnNextAnimator.start()
             }
@@ -457,23 +498,23 @@ class RiddlesActivity : AppCompatActivity() {
         fun animationBtnNext() { // анимация появления кнопки "дальше"
             val animatorBtnNextX: ObjectAnimator
             val animatorBtnNextY: ObjectAnimator
-            if (Progress.getInstance().level <= 21) {
-                btnNext!!.visibility = View.VISIBLE
-                btnNext!!.isClickable = true
-                btnNext!!.alpha = 1.0f
-                animatorBtnNextX = ObjectAnimator.ofFloat(btnNext, View.SCALE_X, 1.0f, 1.1f, 1.0f)
-                animatorBtnNextY = ObjectAnimator.ofFloat(btnNext, View.SCALE_Y, 1.0f, 1.1f, 1.0f)
+            if (viewModel.getMyLevel() <= 21) {
+                btnNextRiddle?.visibility = View.VISIBLE
+                btnNextRiddle?.isClickable = true
+                btnNextRiddle?.alpha = 1.0f
+                animatorBtnNextX = ObjectAnimator.ofFloat(btnNextRiddle, View.SCALE_X, 1.0f, 1.1f, 1.0f)
+                animatorBtnNextY = ObjectAnimator.ofFloat(btnNextRiddle, View.SCALE_Y, 1.0f, 1.1f, 1.0f)
                 animatorBtnNextX.duration = 300
                 animatorBtnNextY.duration = 300
                 animatorBtnNextX.start()
             } else {
-                btnNext!!.isClickable = false
-                val btnNextAnimator = ObjectAnimator.ofFloat(btnNext, View.ALPHA, 1.0f, 0.0f)
+                btnNextRiddle?.isClickable = false
+                val btnNextAnimator = ObjectAnimator.ofFloat(btnNextRiddle, View.ALPHA, 1.0f, 0.0f)
                 if (!isFirstLaunch) {
                     btnNextAnimator.duration = 400
                 } else {
                     isFirstLaunch = false
-                    btnNext!!.visibility = View.INVISIBLE
+                    btnNextRiddle?.visibility = View.INVISIBLE
                     btnNextAnimator.duration = 0
                 }
                 btnNextAnimator.start()
@@ -481,16 +522,16 @@ class RiddlesActivity : AppCompatActivity() {
         }
 
         fun transitionInputReset() {
-            answerTransitions!!.resetTransition()
+            answerTransitions?.resetTransition()
         }
 
         fun editTextRightAnswer() {
             if (INPUT_STATE == 2) { // если сейчас красный ободок, то заменяем на другой
-                answerStateImg!!.setImageDrawable(getDrawable(R.drawable.norm_to_right))
+                answerStateImg?.setImageDrawable(getDrawable(R.drawable.norm_to_right))
             }
             answerTransitions = answerStateImg!!.drawable as TransitionDrawable
-            answerTransitions!!.isCrossFadeEnabled = false
-            answerTransitions!!.startTransition(280)
+            answerTransitions?.isCrossFadeEnabled = false
+            answerTransitions?.startTransition(280)
             INPUT_STATE = 1
         }
 
@@ -510,16 +551,16 @@ class RiddlesActivity : AppCompatActivity() {
         }
 
         fun showProgressBarAd() {
-            progressAdLoad!!.visibility = View.VISIBLE
+            progressAdLoad?.visibility = View.VISIBLE
         }
 
         fun hideProgressBarAd() {
-            progressAdLoad!!.visibility = View.INVISIBLE
+            progressAdLoad?.visibility = View.INVISIBLE
         }
 
         init {
             animationBtnNext(false) // делаем кнопку "дальше" невидимой при старте
-            mlBottom!!.setTransitionListener(object : MotionLayout.TransitionListener {
+            mlBottom?.setTransitionListener(object : MotionLayout.TransitionListener {
                 override fun onTransitionStarted(motionLayout: MotionLayout, i: Int, i1: Int) {}
                 override fun onTransitionChange(
                     motionLayout: MotionLayout,
@@ -531,9 +572,9 @@ class RiddlesActivity : AppCompatActivity() {
 
                 override fun onTransitionCompleted(motionLayout: MotionLayout, i: Int) {
                     if (i == R.id.end) {
-                        imgShowBuy!!.animate().rotation(180f)
+                        imgShowBuy?.animate()?.rotation(180f)
                     } else if (i == R.id.start) {
-                        imgShowBuy!!.animate().rotation(0f)
+                        imgShowBuy?.animate()?.rotation(0f)
                     }
                 }
 
@@ -546,33 +587,41 @@ class RiddlesActivity : AppCompatActivity() {
                 }
             })
         }
+
+        /*companion object {
+            const val defaultInputState = 0
+            const val rightInputState = 1 // правильный ответ
+            const val wrongInputState = 2 // неправильный ответ
+        }*/
     }
 
     private val onClickListener = View.OnClickListener { v ->
         when (v.id) {
             R.id.btnNextQuestion -> {
-                if (Progress.getInstance().level < 22) {
-                    animationController!!.animationBtnNext(false)
-                    changeQuestion()
+                if (viewModel.getMyLevel() < 22) {
+                    animationController?.animationBtnNext(false)
+                    changeRiddle()
                 }
             }
             R.id.btnCheckAnswer -> {
-                /*if (attemptsController!!.isEndlessAttempts) {
-                    *//*val checkAnswerTask = CheckAnswerTask()
-                    checkAnswerTask.execute(etAnswer!!.text.toString())*//*
-                } else if (attemptsController!!.countAttempts == 0) {
-                    attemptByAd
+                if (viewModel.isEndlessAttempts()) {
+                    /*val checkAnswerTask = CheckAnswerTask()
+                    checkAnswerTask.execute(etAnswer!!.text.toString())*/
+                    viewModel.checkAnswer(etAnswer?.text.toString())
+                } else if (viewModel.getCountAttempts() == 0) {
+                    getAttemptByAd()
                 } else {
-                    *//*val checkAnswerTask = CheckAnswerTask()
-                    checkAnswerTask.execute(etAnswer!!.text.toString())*//*
-                }*/
+                    /*val checkAnswerTask = CheckAnswerTask()
+                    checkAnswerTask.execute(etAnswer!!.text.toString())*/
+                    viewModel.checkAnswer(etAnswer?.text.toString())
+                }
             }
             R.id.imgBackToMain -> {
-                // при возвращении на главную активити отправляем разницу между уровнем, когда юзер был на главном экране, и уровнем на данный момент
+                // при возвращении на главную активити отправляем разницу между уровнем, когда юзер был на главном экране и уровнем на данный момент
                 // это нужно для анимации изменения уровня на главной активити
                 val pastLevel = intent.getIntExtra("past_level", 1)
                 val intentMain = Intent()
-                intentMain.putExtra("differ_level", Progress.getInstance().level - pastLevel)
+                intentMain.putExtra("differ_level", viewModel.getMyLevel() - pastLevel)
                 try {
                     setResult(RESULT_OK, intentMain)
                     finish()
@@ -582,17 +631,127 @@ class RiddlesActivity : AppCompatActivity() {
         }
     }
 
+    /* контроллер покупки находится в активити, потому что ему нужен доступ к этой активити и контексту
+    *  а передача ссылки на активити через view model может привести к утечке памяти */
+    inner class PurchaseController {
+
+        var billingClient: BillingClient
+        private val mSkuDetailsMap: MutableMap<String, SkuDetails> = HashMap()
+        var countPurchaseOffer: Int
+            private set
+        var isPayComplete = false
+            private set
+        private val mSkuId = "endless_attempts"
+
+        val DATA_SHOW_PURCHASE = "show_purchase"
+
+        private fun handlePurchase(purchase: Purchase) {
+            // Acknowledge the purchase if it hasn't already been acknowledged.
+            if (!purchase.isAcknowledged) {
+                val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                    .setPurchaseToken(purchase.purchaseToken)
+                    .build()
+                billingClient.acknowledgePurchase(acknowledgePurchaseParams) { billingResult: BillingResult ->
+                    if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                        payComplete()
+                        //statisticsController.sendPurchase(attemptsController.countWrongAnswers)
+                        handler?.sendEmptyMessage(HIDE_PURCHASE)
+                    } else {
+                        Toast.makeText(
+                            this@RiddlesActivity,
+                            "Error with code " + billingResult.responseCode,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        }
+
+        fun increaseCountPurchaseOffer() {
+            StoredData.saveData(DATA_SHOW_PURCHASE, ++countPurchaseOffer)
+        }
+
+        fun buy() {
+            val billingFlowParams = BillingFlowParams.newBuilder()
+                .setSkuDetails(mSkuDetailsMap[mSkuId]!!)
+                .build()
+            billingClient.launchBillingFlow(this@RiddlesActivity, billingFlowParams)
+        }
+
+        private fun payComplete() {
+            animationController?.setAttemptsOnScreen()
+            viewModel.setEndlessAttempts()
+            isPayComplete = true
+        }
+
+        private fun querySkuDetails() {
+            val skuDetailsParamsBuilder = SkuDetailsParams.newBuilder()
+            val skuList: MutableList<String> = ArrayList()
+            skuList.add(mSkuId)
+            skuDetailsParamsBuilder.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
+            billingClient.querySkuDetailsAsync(skuDetailsParamsBuilder.build()) { billingResult, list ->
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && list != null) {
+                    for (skuDetails in list) {
+                        mSkuDetailsMap[skuDetails.sku] = skuDetails
+                    }
+                }
+            }
+        }
+
+        init {
+            countPurchaseOffer = StoredData.getDataInt(DATA_SHOW_PURCHASE, 0)
+            billingClient = BillingClient.newBuilder(this@RiddlesActivity)
+                .enablePendingPurchases()
+                .setListener { billingResult: BillingResult, list: List<Purchase>? ->
+                    if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && list != null) {
+                        //сюда мы попадем когда будет осуществлена покупка
+                        if (list[0].purchaseState == Purchase.PurchaseState.PURCHASED) {
+                            handlePurchase(list[0])
+                        }
+                    }
+                }.build()
+            billingClient.startConnection(object : BillingClientStateListener {
+                override fun onBillingSetupFinished(billingResult: BillingResult) {
+                    try {
+                        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                            querySkuDetails() //запрос о товарах
+                            val purchasesList = queryPurchases() //запрос о покупках
+
+                            //если товар уже куплен, предоставить его пользователю
+                            for (i in purchasesList!!.indices) {
+                                val purchaseId = purchasesList[i].sku
+                                if (TextUtils.equals(mSkuId, purchaseId)) {
+                                    payComplete()
+                                }
+                            }
+                        }
+                    } catch (ex: NullPointerException) {
+                    }
+                }
+
+                private fun queryPurchases(): List<Purchase>? {
+                    val purchasesResult = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
+                    return purchasesResult.purchasesList
+                }
+
+                override fun onBillingServiceDisconnected() {
+                    //сюда мы попадем если что-то пойдет не так
+                }
+            })
+        }
+    }
+
     /*private inner class LoadRiddle : AsyncTask<Void?, Void?, Boolean?>() {
         var loadError = false
         protected override fun doInBackground(vararg voids: Void): Boolean? {
             try {
                 if (!UpdateDataController.getInstance()
-                        .nextRiddleIsLoaded() && Player.getInstance().level < 21
+                        .nextRiddleIsLoaded() && viewModel.getLevel() < 21
                 ) {
                     riddlesController.loadNextRiddle()
                 }
                 if (!UpdateDataController.getInstance()
-                        .riddleIsLoaded() && Player.getInstance().level > 9
+                        .riddleIsLoaded() && viewModel.getLevel() > 9
                 ) {
                     riddlesController.loadRiddle()
                     return true
@@ -608,7 +767,7 @@ class RiddlesActivity : AppCompatActivity() {
             if (isCurrentRiddle != null) {
                 if (!loadError) {
                     if (isCurrentRiddle) {
-                        tvQuestion!!.text = riddlesController.riddle
+                        tvRiddle!!.text = riddlesController.riddle
                     }
                 } else Toast.makeText(
                     this@RiddlesActivity,
@@ -633,11 +792,8 @@ class RiddlesActivity : AppCompatActivity() {
             if (answerOfUser != "") {
                 try {
                     if (riddlesController.checkAnswer(answerOfUser)) { // если ответ правильный
-                        attemptsController!!.resetCountAttempts()
-                        attemptsController!!.resetCountWrongAnswers()
                         handler!!.sendEmptyMessage(HIDE_PURCHASE)
                         if (Progress.getInstance().level <= 20) {
-                            Progress.getInstance().levelUp() // повышвем уровень
                             statisticsController!!.sendNewLevel(Progress.getInstance().level) // отправляем статистику на сервер
                             statisticsController!!.setStartTimeLevel() // устанавливаем время начала прохождения нового уровня
                             answerInputAnimation!!.sendEmptyMessage(RIGHT_ANSWER)
@@ -649,25 +805,8 @@ class RiddlesActivity : AppCompatActivity() {
                         isAnswerRight = true
                     } else { // если ответ неверный, уменьшаем попытки
                         isAnswerRight = false
-                        answerInputAnimation!!.sendEmptyMessage(WRONG_ANSWER)
 
-                        // показываем предложение о покупке
-                        if (adShowed && !purchaseController!!.isPayComplete) {
-                            if (purchaseController!!.countPurchaseOffer == 0) {
-                                handler!!.sendEmptyMessage(SHOW_PURCHASE)
-                                purchaseController!!.increaseCountPurchaseOffer()
-                            } else if (purchaseController!!.countPurchaseOffer == 1) {
-                                if (attemptsController!!.countWrongAnswers == 18) {
-                                    handler!!.sendEmptyMessage(SHOW_PURCHASE)
-                                    purchaseController!!.increaseCountPurchaseOffer()
-                                }
-                            }
-                        }
-                        val countAttempts = attemptsController!!.countAttempts
-                        if (countAttempts > 0 && !attemptsController!!.isEndlessAttempts) {
-                            attemptsController!!.decrementCountAtempts()
-                        }
-                        attemptsController!!.increaseCountWrongAnswers()
+
                     }
                 } catch (ex: NoInternetException) {
                     val assistentDialog = AssistentDialog(AssistentDialog.DIALOG_ALERT_INTERNET)
@@ -691,7 +830,7 @@ class RiddlesActivity : AppCompatActivity() {
                         "ALERT_SERVER"
                     )
                 }
-                handler!!.sendEmptyMessage(CHANGE_HINT_ANSWER)
+
             }
             return false
         }
@@ -714,9 +853,7 @@ class RiddlesActivity : AppCompatActivity() {
         }
     }*/
 
-    companion object {
-        fun convertPixelsToDp(px: Float): Float {
-            return px / (GetContextClass.getContext().resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
-        }
+    private fun convertPixelsToDp(px: Float): Float {
+        return px / (this.resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
     }
 }

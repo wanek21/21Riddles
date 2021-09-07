@@ -12,6 +12,7 @@ import martian.riddles.dto.CheckAnswer
 import martian.riddles.dto.GetRiddle
 import martian.riddles.util.Resource
 import martian.riddles.util.Status
+import martian.riddles.util.log
 import javax.inject.Inject
 
 class RiddlesRepository @Inject constructor(
@@ -26,6 +27,7 @@ class RiddlesRepository @Inject constructor(
     suspend fun getCurrentRiddle(getRiddle: GetRiddle, currentLevel: Int): Resource<String> {
         return withContext(Dispatchers.IO) {
             var riddle = ""
+            //log("current level during getting riddle $currentLevel")
             when (currentLevel) {
                 1 -> riddle = context.resources.getString(R.string.qst1)
                 2 -> riddle = context.resources.getString(R.string.qst2)
@@ -37,6 +39,7 @@ class RiddlesRepository @Inject constructor(
                 8 -> riddle = context.resources.getString(R.string.qst8)
                 9 -> riddle = context.resources.getString(R.string.qst9)
                 in 10..21 -> {
+                    //("getting current riddle from storage")
                     // достаем загадку из памяти
                     riddle = sharedPreferences.getString(
                         DataKeys.CURRENT_RIDDLE.key,
@@ -46,6 +49,7 @@ class RiddlesRepository @Inject constructor(
                     // если загадки в памяти еще нет или была ошибка при загрузке, загружаем
                     if (riddle == DataKeys.EMPTY_RIDDLE.key || riddle == DataKeys.ERROR_LOAD_RIDDLE.key) {
                         riddle = context.getString(R.string.load_riddle_error)
+                        //log("current riddle is empty or error load")
                         loadRiddleFromServer(getRiddle)
                     }
                 }
@@ -54,11 +58,18 @@ class RiddlesRepository @Inject constructor(
             // подгружаем следующую загадку
             if (currentLevel >= START_REMOTE_RIDDLES_LEVEL - 1 && currentLevel != 21) {
                 // если еще не загружена
+                //log("check if next riddle is loaded")
                 if (sharedPreferences.getString(
                         DataKeys.NEXT_RIDDLE.key,
                         DataKeys.EMPTY_RIDDLE.key
-                    ) == DataKeys.EMPTY_RIDDLE.key
+                    ) == DataKeys.EMPTY_RIDDLE.key ||
+                    sharedPreferences.getString(
+                        DataKeys.NEXT_RIDDLE.key,
+                        DataKeys.EMPTY_RIDDLE.key
+                    ) == DataKeys.ERROR_LOAD_RIDDLE.key
                 ) {
+                    //log("next riddle is not loaded, loading...")
+                    getRiddle.next = true
                     loadRiddleFromServer(getRiddle)
                 }
             }
@@ -71,12 +82,12 @@ class RiddlesRepository @Inject constructor(
         val riddle = webService.getRiddle(getRiddle)
         if (riddle.status == Status.SUCCESS) {
             editor.putString(
-                if (getRiddle.isNext) DataKeys.NEXT_RIDDLE.key else DataKeys.CURRENT_RIDDLE.key,
+                if (getRiddle.next) DataKeys.NEXT_RIDDLE.key else DataKeys.CURRENT_RIDDLE.key,
                 riddle.data
             )
         } else {
             editor.putString(
-                if (getRiddle.isNext) DataKeys.NEXT_RIDDLE.key else DataKeys.CURRENT_RIDDLE.key,
+                if (getRiddle.next) DataKeys.NEXT_RIDDLE.key else DataKeys.CURRENT_RIDDLE.key,
                 DataKeys.ERROR_LOAD_RIDDLE.key
             )
         }
@@ -85,7 +96,9 @@ class RiddlesRepository @Inject constructor(
     }
 
     suspend fun checkAnswer(checkAnswer: CheckAnswer): Resource<String> {
-        return webService.checkAnswer(checkAnswer)
+        return withContext(Dispatchers.IO) {
+            webService.checkAnswer(checkAnswer)
+        }
     }
 
     // меняем в памяти местами текущую загадку и следующую
