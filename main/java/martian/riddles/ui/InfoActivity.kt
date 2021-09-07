@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
 import martian.riddles.R
-import martian.riddles.ui.AssistentDialog
 import martian.riddles.util.Status
 import martian.riddles.util.UpdateType
 import java.util.*
@@ -109,7 +108,7 @@ class InfoActivity : AppCompatActivity() {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                     startActivity(intent)
                 } catch (ex: ActivityNotFoundException) {
-                    val assistentDialog = AssistentDialog(AssistentDialog.DIALOG_NO_TELEGRAM)
+                    val assistentDialog = AssistantDialog(AssistantDialog.DIALOG_NO_TELEGRAM)
                     assistentDialog.show(supportFragmentManager, null)
                     val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                     val clip = ClipData.newPlainText("", "twenty_one_riddles")

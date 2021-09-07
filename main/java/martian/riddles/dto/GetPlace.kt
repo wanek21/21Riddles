@@ -1,23 +1,6 @@
-package martian.riddles.dto;
+package martian.riddles.dto
 
-public class GetPlace {
-
-    private String nickname;
-    private String token;
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-}
+data class GetPlace(
+    var nickname: String? = null,
+    var token: String? = null
+)
