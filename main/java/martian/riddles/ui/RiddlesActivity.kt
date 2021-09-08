@@ -26,7 +26,6 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import dagger.hilt.android.AndroidEntryPoint
 import martian.riddles.R
-import martian.riddles.data.local.StoredData
 import martian.riddles.domain.*
 import martian.riddles.util.Status
 import java.util.*
@@ -52,9 +51,6 @@ class RiddlesActivity : AppCompatActivity() {
     private var mlBottom: MotionLayout? = null
     private var imgShowBuy: ImageView? = null
     private var btnBuy: Button? = null
-    //private val riddlesController = RiddlesController()
-    //private var statisticsController: StatisticsController? = null
-    //private var attemptsController: AttemptsController? = null
     private var handler: Handler? = null
     private var purchaseController: PurchaseController? = null
     private var answerInputAnimation: Handler? = null
@@ -71,12 +67,9 @@ class RiddlesActivity : AppCompatActivity() {
     private val SHOW_PROGRESS = 14
     private val HIDE_PROGRESS = 15
     private val CHANGE_HINT_ANSWER = 17
-    private val SHOW_PARTING_WORD = 18
     private val SHOW_PURCHASE = 19
     private val HIDE_PURCHASE = 20
     private val FOCUS_FIXED = 21
-    private val RIGHT_ANSWER = 22
-    private val WRONG_ANSWER = 23
     private var adBlockId: String? = null
     private var adShowed = false // если реклама показалась, то можно показывать предложение о покупке
     val SHOW_PURCHASE_ATTEMPTS = 18 // кол-во неудачных попыток ответа, после которых показывается предложение о покупке
@@ -142,7 +135,7 @@ class RiddlesActivity : AppCompatActivity() {
                         btnNextRiddle?.animate()?.alpha(0f)?.duration = 400
                     }
                     SET_INVISIBLE_BTNNEXT -> {
-                        btnNextRiddle!!.visibility = View.INVISIBLE
+                        btnNextRiddle?.visibility = View.INVISIBLE
                     }
                     SHOW_PROGRESS -> {
                         animationController?.showProgressBarAd()
@@ -181,7 +174,7 @@ class RiddlesActivity : AppCompatActivity() {
 
         etAnswer?.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
-                animationController!!.focusEditText()
+                animationController?.focusEditText()
             }
         }
         viewModel.riddle.observe(this, {
@@ -190,7 +183,7 @@ class RiddlesActivity : AppCompatActivity() {
                     tvRiddle?.text = it.data
                 }
                 Status.ERROR -> {
-                    Toast.makeText(this, getString(R.string.error_during_load_riddle), Toast.LENGTH_SHORT).show()
+                    tvRiddle?.text = getString(it.message ?: R.string.load_riddle_error)
                 }
             }
         })
@@ -202,9 +195,21 @@ class RiddlesActivity : AppCompatActivity() {
                         animationController?.animationBtnNext()
                         animationController?.markAnimate()
                         btnCheckAnswer?.isClickable = false
+
+                        // замена текущей активити на фрагмент с концом игры
+                        if(viewModel.getMyLevel() >= 22) {
+                            val intent = Intent(this@RiddlesActivity, DoneActivity::class.java)
+                            intent.putExtra("past_level", getIntent().getIntExtra("past_level", 1))
+                            startActivity(
+                                Intent(
+                                    this@RiddlesActivity,
+                                    DoneActivity::class.java
+                                )
+                            )
+                            finish()
+                        }
                     } else { // если ответ неправильный
                         animationController?.editTextWrongAnswer()
-                        answerInputAnimation?.sendEmptyMessage(WRONG_ANSWER)
                         etAnswer?.setText("")
 
                         // показываем предложение о покупке, если потрачено достаточное кол-во попыток
@@ -604,16 +609,14 @@ class RiddlesActivity : AppCompatActivity() {
                 }
             }
             R.id.btnCheckAnswer -> {
-                if (viewModel.isEndlessAttempts()) {
-                    /*val checkAnswerTask = CheckAnswerTask()
-                    checkAnswerTask.execute(etAnswer!!.text.toString())*/
-                    viewModel.checkAnswer(etAnswer?.text.toString())
-                } else if (viewModel.getCountAttempts() == 0) {
-                    getAttemptByAd()
-                } else {
-                    /*val checkAnswerTask = CheckAnswerTask()
-                    checkAnswerTask.execute(etAnswer!!.text.toString())*/
-                    viewModel.checkAnswer(etAnswer?.text.toString())
+                if(!etAnswer?.text.isNullOrEmpty()) {
+                    if (viewModel.isEndlessAttempts()) {
+                        viewModel.checkAnswer(etAnswer?.text.toString())
+                    } else if (viewModel.getCountAttempts() == 0) {
+                        getAttemptByAd()
+                    } else {
+                        viewModel.checkAnswer(etAnswer?.text.toString())
+                    }
                 }
             }
             R.id.imgBackToMain -> {
@@ -643,8 +646,6 @@ class RiddlesActivity : AppCompatActivity() {
             private set
         private val mSkuId = "endless_attempts"
 
-        val DATA_SHOW_PURCHASE = "show_purchase"
-
         private fun handlePurchase(purchase: Purchase) {
             // Acknowledge the purchase if it hasn't already been acknowledged.
             if (!purchase.isAcknowledged) {
@@ -668,7 +669,7 @@ class RiddlesActivity : AppCompatActivity() {
         }
 
         fun increaseCountPurchaseOffer() {
-            StoredData.saveData(DATA_SHOW_PURCHASE, ++countPurchaseOffer)
+            viewModel.changeCountPurchaseOffer(++countPurchaseOffer)
         }
 
         fun buy() {
@@ -699,7 +700,7 @@ class RiddlesActivity : AppCompatActivity() {
         }
 
         init {
-            countPurchaseOffer = StoredData.getDataInt(DATA_SHOW_PURCHASE, 0)
+            countPurchaseOffer = viewModel.getCountPurchaseOffer()
             billingClient = BillingClient.newBuilder(this@RiddlesActivity)
                 .enablePendingPurchases()
                 .setListener { billingResult: BillingResult, list: List<Purchase>? ->

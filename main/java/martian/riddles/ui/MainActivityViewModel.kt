@@ -1,5 +1,6 @@
 package martian.riddles.ui
 
+import android.icu.lang.UProperty
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,11 +9,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import martian.riddles.data.local.DataKeys
 import martian.riddles.data.repositories.GameInfoRepository
 import martian.riddles.data.repositories.UsersRepository
 import martian.riddles.dto.Leaders
 import martian.riddles.util.Resource
 import martian.riddles.util.Status
+import martian.riddles.util.UpdateType
 import martian.riddles.util.log
 import java.util.*
 import javax.inject.Inject
@@ -29,6 +32,9 @@ class MainActivityViewModel @Inject constructor(
     private val _prize: MutableLiveData<Resource<String>> = MutableLiveData()
     val prize: LiveData<Resource<String>> = _prize
 
+    private val _appUpdateCheck: MutableLiveData<Resource<UpdateType>> = MutableLiveData()
+    val appUpdateCheck: LiveData<Resource<UpdateType>> = _appUpdateCheck
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             repeat(1000) {
@@ -43,6 +49,7 @@ class MainActivityViewModel @Inject constructor(
                 }
 
                 _prize.postValue(gameInfoRepository.getPrize(Locale.getDefault().language))
+                _appUpdateCheck.postValue(gameInfoRepository.checkAppVersion())
                 delay(5000L)
             }
         }
@@ -66,5 +73,13 @@ class MainActivityViewModel @Inject constructor(
 
     fun getCountLaunch(): Int {
         return gameInfoRepository.getCountLaunchApp()
+    }
+
+    fun wasCompleteGameAnimation(): Boolean {
+        return usersRepository.wasCompleteGameAnimation()
+    }
+
+    fun completeGameAnimation() {
+        usersRepository.completeGameAnimation()
     }
 }

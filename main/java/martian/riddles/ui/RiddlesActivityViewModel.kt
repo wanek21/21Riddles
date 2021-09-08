@@ -56,14 +56,6 @@ class RiddlesActivityViewModel @Inject constructor(
         attemptsController.isEndlessAttempts = true
     }
 
-    fun resetCountAttempts() {
-        attemptsController.resetCountAttempts()
-    }
-
-    fun downCountAttempts() {
-        attemptsController.downCountAttempts()
-    }
-
     fun upCountAttempts() {
         attemptsController.upCountAttempts()
     }
@@ -72,12 +64,11 @@ class RiddlesActivityViewModel @Inject constructor(
         return attemptsController.getCountWrongAnswers()
     }
 
-    fun upCountWrongAnswers() {
-        attemptsController.upCountWrongAnswers()
+    fun getCountPurchaseOffer(): Int {
+        return usersRepository.getCountPurchaseOffer()
     }
 
-    fun resetCountWrongAnswers() {
-        attemptsController.resetCountWrongAnswers()
+    fun changeCountPurchaseOffer(count: Int) {
+        usersRepository.changeCountPurchaseOffer(count)
     }
-
 }

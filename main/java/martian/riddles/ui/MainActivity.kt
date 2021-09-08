@@ -16,12 +16,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.github.florent37.viewtooltip.ViewTooltip
 import dagger.hilt.android.AndroidEntryPoint
 import martian.riddles.R
-import martian.riddles.data.local.StoredData
 import martian.riddles.dto.Leaders
-import martian.riddles.dto.Player
 import martian.riddles.ui.*
 import martian.riddles.util.Resource
 import martian.riddles.util.Status
+import martian.riddles.util.UpdateType
 import martian.riddles.util.log
 import java.util.*
 import kotlin.collections.ArrayList
@@ -71,6 +70,15 @@ class MainActivity : AppCompatActivity() {
                 tvPrize?.text = prize
             }
         }
+
+    }
+    private val appUpdateObserver = Observer<Resource<UpdateType>> {
+        if(it.status == Status.SUCCESS) {
+            if(it.data == UpdateType.FORCE_UPDATE) {
+                val updateDialog = AssistantDialog(AssistantDialog.DIALOG_FORCE_UPDATE)
+                updateDialog.show(supportFragmentManager, "UPDATE")
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,16 +122,17 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.leaders.observe(this, leadersObserver)
         viewModel.prize.observe(this, prizeObserver)
+        viewModel.appUpdateCheck.observe(this, appUpdateObserver)
     }
 
     override fun onResume() {
         super.onResume()
         setTextForMainButton()
         if (viewModel.getLevel() == 22 &&
-            !StoredData.getDataBool(StoredData.DATA_DONE_GAME_ANIM_COMPLETE)
+            !viewModel.wasCompleteGameAnimation()
         ) {
             levelController?.initLevel(true)
-            StoredData.saveData(StoredData.DATA_DONE_GAME_ANIM_COMPLETE, true)
+            viewModel.completeGameAnimation()
         }
 
         // запускаем потоки для обновления данных и проверки принудительных обновлений
@@ -131,16 +140,6 @@ class MainActivity : AppCompatActivity() {
         updateDataThread.start();
         checkForceUpdateTask = new CheckForceUpdateTask();
         checkForceUpdateTask.execute();*/
-    }
-
-    override fun onPause() {
-        super.onPause()
-        //updateDataThread.toStop();
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        //if(updateDataThread != null) updateDataThread.toStop();
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

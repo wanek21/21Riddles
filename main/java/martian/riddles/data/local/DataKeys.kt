@@ -13,5 +13,6 @@ enum class DataKeys(val key: String) {
     EMPTY_RIDDLE("empty_riddle"),
     ERROR_LOAD_RIDDLE("error_load_riddle"),
     COUNT_ATTEMPTS("count_attempts"),
-    COUNT_WRONG_ANSWERS("count_wrong_answers")
+    COUNT_WRONG_ANSWERS("count_wrong_answers"),
+    DONE_GAME_ANIM_COMPLETE("done_game_animation_complete")
 }

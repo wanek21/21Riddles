@@ -1,17 +1,14 @@
 package martian.riddles.data.repositories
 
 import android.content.SharedPreferences
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import martian.riddles.BuildConfig
 import martian.riddles.data.local.DataKeys
-import martian.riddles.data.local.GameInfoDao
 import martian.riddles.data.remote.WebService
 import martian.riddles.util.Resource
 import martian.riddles.util.Status
 import martian.riddles.util.UpdateType
-import martian.riddles.util.log
 import javax.inject.Inject
 
 class GameInfoRepository @Inject constructor(

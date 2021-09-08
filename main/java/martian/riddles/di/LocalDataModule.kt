@@ -9,7 +9,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import martian.riddles.data.local.*
-import martian.riddles.util.GetContextClass
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -41,16 +40,6 @@ class LocalDataModule {
     @Provides
     fun usersDao(appDatabase: AppDatabase): UsersDao {
         return appDatabase.usersDao()
-    }
-
-    @Provides
-    fun riddlesDao(appDatabase: AppDatabase): RiddlesDao {
-        return appDatabase.riddlesDao()
-    }
-
-    @Provides
-    fun gameInfoDao(appDatabase: AppDatabase): GameInfoDao {
-        return appDatabase.gameInfoDao()
     }
 }
 

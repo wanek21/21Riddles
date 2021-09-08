@@ -39,7 +39,7 @@ class ControllersModule {
 
     @Provides
     @Singleton
-    fun getStatisticsController(@ApplicationContext context: Context): StatisticsController {
-        return StatisticsController(context)
+    fun getStatisticsController(@ApplicationContext context: Context, usersRepository: UsersRepository): StatisticsController {
+        return StatisticsController(context, usersRepository)
     }
 }

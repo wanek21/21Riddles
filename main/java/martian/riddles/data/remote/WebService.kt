@@ -4,10 +4,7 @@ import com.skydoves.sandwich.suspendOnError
 import com.skydoves.sandwich.suspendOnFailure
 import com.skydoves.sandwich.suspendOnSuccess
 import martian.riddles.R
-import martian.riddles.dto.CheckAnswer
-import martian.riddles.dto.GetRiddle
-import martian.riddles.dto.Leaders
-import martian.riddles.dto.RegisterUser
+import martian.riddles.dto.*
 import martian.riddles.dto.RegisterUser.StatusCode
 import martian.riddles.util.Resource
 import martian.riddles.util.UpdateType
@@ -142,6 +139,42 @@ class WebService @Inject constructor(
                         6 -> Resource.success(UpdateType.FORCE_UPDATE)
                         else -> Resource.success(UpdateType.CURRENT)
                     }
+                }
+            }
+            suspendOnError { result = Resource.error(R.string.error_on_server, null) }
+            suspendOnFailure { result = Resource.error(R.string.connection_error, null) }
+        }
+
+        return result
+    }
+
+    suspend fun getPlace(getPlace: GetPlace): Resource<Int> {
+        var result: Resource<Int> = Resource.error(R.string.unknown_error, null)
+
+        val serverResponse = serverApi.getPlace(getPlace)
+        with(serverResponse) {
+            suspendOnSuccess {
+                if(this.data != null) {
+                    result = Resource.success(this.data!!.string().toInt())
+                    log("webService: place = ${result.data}")
+                }
+            }
+            suspendOnError { result = Resource.error(R.string.error_on_server, null) }
+            suspendOnFailure { result = Resource.error(R.string.connection_error, null) }
+        }
+
+        return result
+    }
+
+    suspend fun getEmailContact(getEmail: GetEmail): Resource<String> {
+        var result: Resource<String> = Resource.error(R.string.unknown_error, null)
+
+        val serverResponse = serverApi.getEmail(getEmail)
+        with(serverResponse) {
+            suspendOnSuccess {
+                if(this.data != null) {
+                    result = Resource.success(this.data!!.string())
+                    log("webService: email = ${result.data}")
                 }
             }
             suspendOnError { result = Resource.error(R.string.error_on_server, null) }

@@ -8,18 +8,22 @@ import martian.riddles.data.local.DataKeys
 import martian.riddles.data.local.UsersDao
 import martian.riddles.data.remote.WebService
 import martian.riddles.domain.AttemptsController
+import martian.riddles.dto.GetEmail
+import martian.riddles.dto.GetPlace
 import martian.riddles.dto.Leaders
 import martian.riddles.dto.RegisterUser
 import martian.riddles.util.Resource
 import martian.riddles.util.Status
 import martian.riddles.util.log
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class UsersRepository @Inject constructor(
-        private val usersDao: UsersDao,
-        private val sharedPreferences: SharedPreferences,
-        private val editSharedPreferences: SharedPreferences.Editor,
-        private val webService: WebService
+    private val usersDao: UsersDao,
+    private val sharedPreferences: SharedPreferences,
+    private val editSharedPreferences: SharedPreferences.Editor,
+    private val webService: WebService
 ) {
 
     suspend fun signUp(registerUser: RegisterUser): Resource<*> {
@@ -48,13 +52,26 @@ class UsersRepository @Inject constructor(
         }
     }
 
+    // получить место при завершении игры
+    suspend fun getMyPlace(): Resource<Int> {
+        return withContext(Dispatchers.IO) {
+            val getPlace = GetPlace(getMyNickname(), getMyToken())
+            webService.getPlace(getPlace)
+        }
+    }
+
+    suspend fun getEmailContact(): Resource<String> {
+        return withContext(Dispatchers.IO) {
+            val getEmail = GetEmail(getMyNickname(), getMyToken(), Locale.getDefault().language)
+            webService.getEmailContact(getEmail)
+        }
+    }
+
     private suspend fun refreshLeaders() {
         val leaders = webService.getLeaders()
         if(leaders.status == Status.SUCCESS) {
-            //log( "before transform")
             val leadersDao = Leaders.toDao(leaders.data)
             usersDao.saveLeaders(leadersDao)
-            //log( "after dao saving")
         }
     }
 
@@ -97,6 +114,24 @@ class UsersRepository @Inject constructor(
 
     fun changeMyCountWrongAnswers(count: Int) {
         editSharedPreferences.putInt(DataKeys.COUNT_WRONG_ANSWERS.key, count)
+        editSharedPreferences.commit()
+    }
+
+    fun wasCompleteGameAnimation(): Boolean {
+        return sharedPreferences.getBoolean(DataKeys.DONE_GAME_ANIM_COMPLETE.key, false)
+    }
+
+    fun completeGameAnimation() {
+        editSharedPreferences.putBoolean(DataKeys.DONE_GAME_ANIM_COMPLETE.key, true)
+        editSharedPreferences.commit()
+    }
+
+    fun getCountPurchaseOffer(): Int {
+        return sharedPreferences.getInt(DataKeys.SHOW_PURCHASE_COUNT.key, 0)
+    }
+
+    fun changeCountPurchaseOffer(count: Int) {
+        editSharedPreferences.putInt(DataKeys.SHOW_PURCHASE_COUNT.key, count)
         editSharedPreferences.commit()
     }
 }

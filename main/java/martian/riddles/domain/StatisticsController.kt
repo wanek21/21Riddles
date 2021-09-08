@@ -1,11 +1,14 @@
 package martian.riddles.domain
 
 import android.content.Context
+import martian.riddles.data.repositories.UsersRepository
 
 //import com.google.firebase.analytics.FirebaseAnalytics;
+
 class StatisticsController     //mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
     (  // private FirebaseAnalytics mFirebaseAnalytics;
-    private val context: Context
+    private val context: Context,
+    private val usersRepository: UsersRepository
 ) {
     fun setStartTimeLevel() { // установить время начала прохождения уровня
         /*SimpleDateFormat format = new SimpleDateFormat("hh dd MM yyyy");
@@ -16,7 +19,7 @@ class StatisticsController     //mFirebaseAnalytics = FirebaseAnalytics.getInsta
 
     fun sendAttempt(endlessAttempts: Boolean) {
         /*Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Level: " + Player.getInstance().getLevel());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Level: " + user); // TODO remove Player.getInstance()
         bundle.putDouble(FirebaseAnalytics.Param.VALUE, endlessAttempts ? 0 : 1);
         bundle.putString(FirebaseAnalytics.Param.VIRTUAL_CURRENCY_NAME, "attempt");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SPEND_VIRTUAL_CURRENCY, bundle);*/
