@@ -35,7 +35,6 @@ import java.util.concurrent.TimeUnit
 @AndroidEntryPoint
 class RiddlesActivity : AppCompatActivity() {
 
-    var rewardedAd: RewardedAd? = null
     private var tvRiddle: TextView? = null
     private var tvTopLvl: TextView? = null // следующий уровень, будет "вылазить" сверху при анимации
     private var tvBottomLvl: TextView? = null // текущий уровень
@@ -51,25 +50,19 @@ class RiddlesActivity : AppCompatActivity() {
     private var mlBottom: MotionLayout? = null
     private var imgShowBuy: ImageView? = null
     private var btnBuy: Button? = null
-    private var handler: Handler? = null
-    private var purchaseController: PurchaseController? = null
+    var rewardedAd: RewardedAd? = null
+
+    private var riddleHandlerAnimation: Handler? = null
     private var answerInputAnimation: Handler? = null
+    private var purchaseController: PurchaseController? = null
     private var animationController: AnimationController? = null
     var fullScreenContentCallback: FullScreenContentCallback? = null
-    private val ALPHA_DOWN = 1
-    private val ALPHA_UP = 2
-    private val LOAD_AD = 3
-    private val SET_RED_ANSWER = 4
-    private val ALPHA_DOWN_BTNNEXT = 7
-    private val SET_INVISIBLE_BTNNEXT = 8
+
+    private val RIDDLE_ALPHA_DOWN = 1
+    private val RIDDLE_ALPHA_UP = 2
     private val CHANGE_ANSWER = 9
-    private val TRANSITION_RESET = 13
-    private val SHOW_PROGRESS = 14
-    private val HIDE_PROGRESS = 15
-    private val CHANGE_HINT_ANSWER = 17
-    private val SHOW_PURCHASE = 19
-    private val HIDE_PURCHASE = 20
-    private val FOCUS_FIXED = 21
+    private val ANSWER_TRANSITION_RESET = 13
+
     private var adBlockId: String? = null
     private var adShowed = false // если реклама показалась, то можно показывать предложение о покупке
     val SHOW_PURCHASE_ATTEMPTS = 18 // кол-во неудачных попыток ответа, после которых показывается предложение о покупке
@@ -87,71 +80,25 @@ class RiddlesActivity : AppCompatActivity() {
             override fun handleMessage(msg: Message) {
                 super.handleMessage(msg)
                 when (msg.what) {
-                    FOCUS_FIXED -> {
-                        answerStateImg!!.setImageDrawable(getDrawable(R.drawable.norm_to_right))
-                        animationController!!.INPUT_STATE = 0
-                    }
-                    SET_RED_ANSWER -> {
-                        answerStateImg?.setImageResource(R.drawable.bottom_img_wrong)
-                        animationController?.INPUT_STATE = 2
-                    }
-                    TRANSITION_RESET -> {
+                    ANSWER_TRANSITION_RESET -> {
                         animationController?.transitionInputReset()
                     }
                 }
             }
         }
-        handler = object : Handler(Looper.getMainLooper()) {
+        riddleHandlerAnimation = object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
                 super.handleMessage(msg)
                 when (msg.what) {
-                    ALPHA_DOWN -> tvRiddle?.animate()?.alpha(0f)?.duration = 1000
-                    ALPHA_UP -> tvRiddle?.animate()?.alpha(1f)?.duration = 1000
-                    LOAD_AD -> {
-                        loadAd()
-                    }
+                    RIDDLE_ALPHA_DOWN -> tvRiddle?.animate()?.alpha(0f)?.duration = 1000
+                    RIDDLE_ALPHA_UP -> tvRiddle?.animate()?.alpha(1f)?.duration = 1000
                     CHANGE_ANSWER -> {
                         viewModel.getCurrentRiddle()
-                    }
-                    CHANGE_HINT_ANSWER -> {
-                        if (!viewModel.isEndlessAttempts()) {
-                            val countAttempts = viewModel.getCountAttempts()
-                            if (countAttempts in 1..3) {
-                                etAnswer?.hint =
-                                    resources.getString(R.string.attempts) + " " + countAttempts
-                                btnCheckAnswer?.maxLines = 1
-                                btnCheckAnswer?.setText(R.string.check_answer)
-                            } else if (countAttempts == 0) {
-                                etAnswer?.hint =
-                                    resources.getString(R.string.attempts) + " " + countAttempts
-                                btnCheckAnswer?.maxLines = 2
-                                btnCheckAnswer?.setText(R.string.look_ad)
-                            }
-                        } else {
-                            etAnswer?.hint = ""
-                        }
-                    }
-                    ALPHA_DOWN_BTNNEXT -> {
-                        btnNextRiddle?.animate()?.alpha(0f)?.duration = 400
-                    }
-                    SET_INVISIBLE_BTNNEXT -> {
-                        btnNextRiddle?.visibility = View.INVISIBLE
-                    }
-                    SHOW_PROGRESS -> {
-                        animationController?.showProgressBarAd()
-                    }
-                    HIDE_PROGRESS -> {
-                        animationController?.hideProgressBarAd()
-                    }
-                    SHOW_PURCHASE -> {
-                        animationController?.showPurchase()
-                    }
-                    HIDE_PURCHASE -> {
-                        animationController?.hidePurchase()
                     }
                 }
             }
         }
+
         tvRiddle = findViewById(R.id.tvQuestion)
         tvTopLvl = findViewById(R.id.tvTop)
         tvBottomLvl = findViewById(R.id.tvBottom)
@@ -215,17 +162,18 @@ class RiddlesActivity : AppCompatActivity() {
                         // показываем предложение о покупке, если потрачено достаточное кол-во попыток
                         if (adShowed && !purchaseController!!.isPayComplete) {
                             if (purchaseController?.countPurchaseOffer == 0) {
-                                handler?.sendEmptyMessage(SHOW_PURCHASE)
+                                animationController?.showPurchase()
                                 purchaseController?.increaseCountPurchaseOffer()
                             } else if (purchaseController!!.countPurchaseOffer == 1) {
                                 if (viewModel.getCountWrongAnswers() == SHOW_PURCHASE_ATTEMPTS) {
-                                    handler?.sendEmptyMessage(SHOW_PURCHASE)
+                                    animationController?.showPurchase()
                                     purchaseController?.increaseCountPurchaseOffer()
                                 }
                             }
                         }
                     }
-                    handler?.sendEmptyMessage(CHANGE_HINT_ANSWER)
+
+                    animationController?.changeHintAnswer()
                 }
                 Status.LOADING -> {
                     btnCheckAnswer?.isClickable = false
@@ -233,7 +181,7 @@ class RiddlesActivity : AppCompatActivity() {
                 Status.ERROR -> {
                     Toast.makeText(
                         this,
-                        getString(it.message ?: R.string.error_during_load_riddle),
+                        getString(it.message ?: R.string.error_during_checking_answer),
                         Toast.LENGTH_SHORT
                     ).show()
                     btnCheckAnswer?.isClickable = true
@@ -242,17 +190,8 @@ class RiddlesActivity : AppCompatActivity() {
         })
         tvTopLvl?.text = (viewModel.getMyLevel()+1).toString()
         tvBottomLvl?.text = viewModel.getMyLevel().toString()
-        //statisticsController = StatisticsController(this)
-        //purchaseController = PurchaseController(this)
         animationController = AnimationController()
-        //attemptsController = AttemptsController(statisticsController)
 
-        // если юзер разгадал все, но не проверил является ли он победителем
-        /*if (!StoredData.getDataBool(StoredData.DATA_WINNER_IS_CHECKED) && Progress.getInstance().level < 22) {
-            tvRiddle?.text = riddlesController.riddle
-            tvTopLvl?.text = (Progress.getInstance().level + 1).toString()
-            tvBottomLvl?.text = Progress.getInstance().level.toString()
-        }*/
         setInputMode() // если экран маленький, то макет поднимается при появлении клавиатуры
         fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdShowedFullScreenContent() {}
@@ -273,13 +212,11 @@ class RiddlesActivity : AppCompatActivity() {
             AdRequest.Builder().build(),
             object : RewardedAdLoadCallback() {
                 override fun onAdLoaded(ad: RewardedAd) {
-                    //super.onAdLoaded(rewardedAd!!)
                     rewardedAd = ad
                     rewardedAd?.fullScreenContentCallback = fullScreenContentCallback
                 }
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                    //super.onAdFailedToLoad(loadAdError)
                     //statisticsController!!.sendErrorAd(loadAdError.code)
                     when (loadAdError.code) {
                         0 -> Toast.makeText(
@@ -300,7 +237,7 @@ class RiddlesActivity : AppCompatActivity() {
     // показать рекламу, чтобы добавить попытку
     private fun getAttemptByAd() {
         if (rewardedAd != null) {
-            rewardedAd!!.show(
+            rewardedAd?.show(
                 this
             ) {
                 Toast.makeText(
@@ -349,6 +286,12 @@ class RiddlesActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        toMainScreen()
+    }
+
+    // при возвращении на главную активити отправляем разницу между уровнем, когда юзер был на главном экране и уровнем на данный момент
+    // это нужно для анимации изменения уровня на главной активити
+    private fun toMainScreen() {
         val pastLevel = intent.getIntExtra("past_level", 1)
         val intentMain = Intent()
         intentMain.putExtra("differ_level", viewModel.getMyLevel() - pastLevel)
@@ -361,18 +304,17 @@ class RiddlesActivity : AppCompatActivity() {
     }
 
     private fun changeRiddle() {
-        // анимация вопроса
-
+        // анимация смены загадки
         Thread {
-            handler?.sendEmptyMessage(ALPHA_DOWN)
+            riddleHandlerAnimation?.sendEmptyMessage(RIDDLE_ALPHA_DOWN)
             try {
                 Thread.sleep(1000)
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
-            handler?.sendEmptyMessage(CHANGE_ANSWER)
-            answerInputAnimation?.sendEmptyMessage(TRANSITION_RESET) // сбрасываем transition, чтобы запустить потом снова
-            handler?.sendEmptyMessage(ALPHA_UP)
+            riddleHandlerAnimation?.sendEmptyMessage(CHANGE_ANSWER)
+            answerInputAnimation?.sendEmptyMessage(ANSWER_TRANSITION_RESET) // сбрасываем transition, чтобы запустить потом снова
+            riddleHandlerAnimation?.sendEmptyMessage(RIDDLE_ALPHA_UP)
         }.start()
         animationController?.changeRiddle()
         animationController?.changeLevelTop()
@@ -423,14 +365,37 @@ class RiddlesActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
                 if (INPUT_STATE != 1) {
-                    answerInputAnimation!!.sendEmptyMessage(FOCUS_FIXED)
+                    setAnswerInputToNormal()
                 }
             }.start()
         }
 
+        fun setAnswerInputToNormal() {
+            answerStateImg?.setImageDrawable(getDrawable(R.drawable.norm_to_right))
+            animationController?.INPUT_STATE = 0
+        }
         fun changeRiddle() {
             answerTransitions?.reverseTransition(500)
             mlMain?.transitionToStart()
+        }
+
+        fun changeHintAnswer() {
+            if (!viewModel.isEndlessAttempts()) {
+                val countAttempts = viewModel.getCountAttempts()
+                if (countAttempts in 1..3) {
+                    etAnswer?.hint =
+                        resources.getString(R.string.attempts) + " " + countAttempts
+                    btnCheckAnswer?.maxLines = 1
+                    btnCheckAnswer?.setText(R.string.check_answer)
+                } else if (countAttempts == 0) {
+                    etAnswer?.hint =
+                        resources.getString(R.string.attempts) + " " + countAttempts
+                    btnCheckAnswer?.maxLines = 2
+                    btnCheckAnswer?.setText(R.string.look_ad)
+                }
+            } else {
+                etAnswer?.hint = ""
+            }
         }
 
         fun markAnimate() {
@@ -540,17 +505,22 @@ class RiddlesActivity : AppCompatActivity() {
             INPUT_STATE = 1
         }
 
+        fun setRedAnswer() {
+            answerStateImg?.setImageResource(R.drawable.bottom_img_wrong)
+            animationController?.INPUT_STATE = 2
+        }
+
         fun editTextWrongAnswer() {
             Thread {
                 // поток для изменения цвета обводки ответа на неправильный
-                answerInputAnimation!!.sendEmptyMessage(SET_RED_ANSWER)
+                setRedAnswer()
                 try {
                     TimeUnit.SECONDS.sleep(3)
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
                 if (INPUT_STATE != 1) {
-                    answerInputAnimation!!.sendEmptyMessage(FOCUS_FIXED) // возвращаемся к обычному состоянию
+                    setAnswerInputToNormal() // возвращаемся к обычному состоянию
                 }
             }.start()
         }
@@ -609,27 +579,16 @@ class RiddlesActivity : AppCompatActivity() {
                 }
             }
             R.id.btnCheckAnswer -> {
-                if(!etAnswer?.text.isNullOrEmpty()) {
-                    if (viewModel.isEndlessAttempts()) {
-                        viewModel.checkAnswer(etAnswer?.text.toString())
-                    } else if (viewModel.getCountAttempts() == 0) {
-                        getAttemptByAd()
-                    } else {
-                        viewModel.checkAnswer(etAnswer?.text.toString())
-                    }
+                if (viewModel.isEndlessAttempts()) {
+                    viewModel.checkAnswer(etAnswer?.text.toString())
+                } else if (viewModel.getCountAttempts() == 0) {
+                    getAttemptByAd()
+                } else {
+                    viewModel.checkAnswer(etAnswer?.text.toString())
                 }
             }
             R.id.imgBackToMain -> {
-                // при возвращении на главную активити отправляем разницу между уровнем, когда юзер был на главном экране и уровнем на данный момент
-                // это нужно для анимации изменения уровня на главной активити
-                val pastLevel = intent.getIntExtra("past_level", 1)
-                val intentMain = Intent()
-                intentMain.putExtra("differ_level", viewModel.getMyLevel() - pastLevel)
-                try {
-                    setResult(RESULT_OK, intentMain)
-                    finish()
-                } catch (ex: NullPointerException) {
-                }
+                toMainScreen()
             }
         }
     }
@@ -656,7 +615,7 @@ class RiddlesActivity : AppCompatActivity() {
                     if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                         payComplete()
                         //statisticsController.sendPurchase(attemptsController.countWrongAnswers)
-                        handler?.sendEmptyMessage(HIDE_PURCHASE)
+                        animationController?.hidePurchase()
                     } else {
                         Toast.makeText(
                             this@RiddlesActivity,
@@ -741,118 +700,6 @@ class RiddlesActivity : AppCompatActivity() {
             })
         }
     }
-
-    /*private inner class LoadRiddle : AsyncTask<Void?, Void?, Boolean?>() {
-        var loadError = false
-        protected override fun doInBackground(vararg voids: Void): Boolean? {
-            try {
-                if (!UpdateDataController.getInstance()
-                        .nextRiddleIsLoaded() && viewModel.getLevel() < 21
-                ) {
-                    riddlesController.loadNextRiddle()
-                }
-                if (!UpdateDataController.getInstance()
-                        .riddleIsLoaded() && viewModel.getLevel() > 9
-                ) {
-                    riddlesController.loadRiddle()
-                    return true
-                }
-            } catch (ex: NoInternetException) {
-                loadError = true
-            }
-            return null
-        }
-
-        override fun onPostExecute(isCurrentRiddle: Boolean?) {
-            super.onPostExecute(isCurrentRiddle)
-            if (isCurrentRiddle != null) {
-                if (!loadError) {
-                    if (isCurrentRiddle) {
-                        tvRiddle!!.text = riddlesController.riddle
-                    }
-                } else Toast.makeText(
-                    this@RiddlesActivity,
-                    R.string.load_riddle_error,
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
-    }
-
-    private inner class CheckAnswerTask : AsyncTask<String?, Void?, Boolean>() {
-        // проверка ответа
-        // используются, чтобы запретить кликать пока не нажмут кнопку "дальше"
-        var isAnswerRight = false
-        var isNoServerErrors = true
-        override fun onPreExecute() {
-            btnCheckAnswer!!.isClickable = false
-        }
-
-        protected override fun doInBackground(vararg answer: String): Boolean {
-            val answerOfUser = answer[0]
-            if (answerOfUser != "") {
-                try {
-                    if (riddlesController.checkAnswer(answerOfUser)) { // если ответ правильный
-                        handler!!.sendEmptyMessage(HIDE_PURCHASE)
-                        if (Progress.getInstance().level <= 20) {
-                            statisticsController!!.sendNewLevel(Progress.getInstance().level) // отправляем статистику на сервер
-                            statisticsController!!.setStartTimeLevel() // устанавливаем время начала прохождения нового уровня
-                            answerInputAnimation!!.sendEmptyMessage(RIGHT_ANSWER)
-                        } else if (Progress.getInstance().level == 21) { // если пройденнй уровень был последним
-                            Progress.getInstance().done(true)
-                            Progress.getInstance().levelUp()
-                            answerInputAnimation!!.sendEmptyMessage(RIGHT_ANSWER)
-                        }
-                        isAnswerRight = true
-                    } else { // если ответ неверный, уменьшаем попытки
-                        isAnswerRight = false
-
-
-                    }
-                } catch (ex: NoInternetException) {
-                    val assistentDialog = AssistentDialog(AssistentDialog.DIALOG_ALERT_INTERNET)
-                    assistentDialog.show(
-                        this@RiddlesActivity.supportFragmentManager,
-                        "ALERT_INTERNET"
-                    )
-                    isNoServerErrors = false
-                } catch (ex: ErrorOnServerException) {
-                    isNoServerErrors = false
-                    val assistentDialog = AssistentDialog(AssistentDialog.DIALOG_SERVER_ERROR)
-                    assistentDialog.show(
-                        this@RiddlesActivity.supportFragmentManager,
-                        "ALERT_SERVER"
-                    )
-                } catch (ex: IOException) {
-                    isNoServerErrors = false
-                    val assistentDialog = AssistentDialog(AssistentDialog.DIALOG_SERVER_ERROR)
-                    assistentDialog.show(
-                        this@RiddlesActivity.supportFragmentManager,
-                        "ALERT_SERVER"
-                    )
-                }
-
-            }
-            return false
-        }
-
-        override fun onPostExecute(isWinner: Boolean) {
-            if (isAnswerRight) btnCheckAnswer!!.isClickable =
-                false else btnCheckAnswer!!.isClickable = true
-            if (!isNoServerErrors) btnCheckAnswer!!.isClickable = true
-            if (Progress.getInstance().isDone) {
-                finish()
-                val intent = Intent(this@RiddlesActivity, DoneActivity::class.java)
-                intent.putExtra("past_level", getIntent().getIntExtra("past_level", 1))
-                startActivity(
-                    Intent(
-                        this@RiddlesActivity,
-                        DoneActivity::class.java
-                    )
-                ) // замена текущей активити на фрагмент с концом игры
-            }
-        }
-    }*/
 
     private fun convertPixelsToDp(px: Float): Float {
         return px / (this.resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)

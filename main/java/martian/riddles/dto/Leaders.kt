@@ -7,7 +7,7 @@ data class Leaders(
     val riddle: Int = 0,
     val nickname: String = "...",
     val countUsersOnThisRiddle: Int = 0,
-    val isCompleteGame: Boolean = false
+    val completeGame: Boolean = false
 ) {
     companion object {
         fun fromDao(l: List<Leader>?): ArrayList<Leaders> {
@@ -22,7 +22,7 @@ data class Leaders(
                         riddle = l[i].level,
                         nickname = l[i].nickname,
                         countUsersOnThisRiddle = l[i].countUsersOnLevel,
-                        isCompleteGame = l[i].completeGame
+                        completeGame = l[i].completeGame
                     )
                 }
             }
@@ -43,11 +43,10 @@ data class Leaders(
                         nickname = l[i].nickname,
                         level = l[i].riddle,
                         countUsersOnLevel =  l[i].countUsersOnThisRiddle,
-                        completeGame = l[i].isCompleteGame
+                        completeGame = l[i].completeGame
                     )
                 }
             }
-            //log( "toDao: $resultLeaders")
             return resultLeaders
         }
     }

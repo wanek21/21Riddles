@@ -55,10 +55,6 @@ class DoneActivity : AppCompatActivity() {
                 tvEmail?.text = it.data.toString()
             }
         })
-        /*if (place != 0) {
-            tvPlace?.text = place.toString()
-            if (place == 1) showInfoForWinner()
-        } else AsyncLoadPlace().execute()*/
 
         btnSendReview?.setOnTouchListener { v: View, event: MotionEvent ->
             when (event.action) {
@@ -102,18 +98,17 @@ class DoneActivity : AppCompatActivity() {
         }
     }
 
-    // TODO возможно это не надо
-    /*override fun onBackPressed() {
+    override fun onBackPressed() {
         val pastLevel = intent.getIntExtra("past_level", 22)
         val intentMain = Intent()
-        intentMain.putExtra("differ_level", Progress.getInstance().level - pastLevel)
+        intentMain.putExtra("differ_level", viewModel.getMyLevel() - pastLevel)
         try {
             setResult(RESULT_OK, intentMain)
             finish()
         } catch (ex: NullPointerException) {
         }
         finish()
-    }*/
+    }
 
     override fun onResume() {
         super.onResume()

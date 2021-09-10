@@ -34,16 +34,8 @@ class MainActivity : AppCompatActivity() {
     private var tvName: TextView? = null
     private var imgBackLevel: ImageView? = null
     private var tvLevel: TextView? = null
-
-    //private UpdateDataThread updateDataThread;
-    //private CheckForceUpdateTask checkForceUpdateTask;
     private var animBtnHelp: ObjectAnimator? = null
     private var locale: String? = null
-
-    /*private val playersNames = ArrayList<String>()
-    private val playersLevels = ArrayList<Int>()
-    private val playersCount = ArrayList<Int>()*/
-    private val DATA_LEADERS = "leaders_list"
 
     private var leadersController: LeadersController? = null
     private var levelController: LevelController? = null
@@ -58,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 if (leadersController == null) {
                     leadersController = LeadersController(it.data)
                 }
-                leadersController!!.updateLeaders(it.data)
+                leadersController?.updateLeaders(it.data)
             }
         }
     }
@@ -66,7 +58,6 @@ class MainActivity : AppCompatActivity() {
         when (it.status) {
             Status.SUCCESS -> {
                 val prize = it.data + " " + getString(R.string.currency_locale);
-                //log( "mainactivity prize: $prize")
                 tvPrize?.text = prize
             }
         }
@@ -134,12 +125,6 @@ class MainActivity : AppCompatActivity() {
             levelController?.initLevel(true)
             viewModel.completeGameAnimation()
         }
-
-        // запускаем потоки для обновления данных и проверки принудительных обновлений
-        /*updateDataThread = new UpdateDataThread();
-        updateDataThread.start();
-        checkForceUpdateTask = new CheckForceUpdateTask();
-        checkForceUpdateTask.execute();*/
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -178,18 +163,18 @@ class MainActivity : AppCompatActivity() {
     private fun setTextForMainButton() {
         when (viewModel.getLevel()) {
             1 -> {
-                btnNext!!.text = this@MainActivity.resources.getString(R.string.start_game)
+                btnNext?.text = this@MainActivity.resources.getString(R.string.start_game)
             }
             in 2..21 -> {
-                btnNext!!.text = this@MainActivity.resources.getString(R.string.continue_game)
+                btnNext?.text = this@MainActivity.resources.getString(R.string.continue_game)
             }
             22 -> {
-                btnNext!!.setText(R.string.view_resluts_btn)
+                btnNext?.setText(R.string.view_resluts_btn)
             }
         }
     }
 
-    fun clickRules() { // анимация нажатия кнопки с правилами
+    private fun clickRules() { // анимация нажатия кнопки с правилами
         val btnHide = ObjectAnimator.ofFloat(btnHelp, View.ALPHA, 1.0f, 0.8f)
         val btnShow = ObjectAnimator.ofFloat(btnHelp, View.ALPHA, 0.8f, 1.0f)
         btnHide.duration = 300
@@ -198,7 +183,7 @@ class MainActivity : AppCompatActivity() {
         btnShow.duration = 300
         btnShow.start()
         if (animBtnHelp != null) {
-            animBtnHelp!!.cancel()
+            animBtnHelp?.cancel()
             animBtnHelp = ObjectAnimator.ofFloat(btnHelp, View.ROTATION_Y, 0.0f)
             animBtnHelp?.repeatCount = 0
             animBtnHelp?.duration = 500
@@ -506,14 +491,13 @@ class MainActivity : AppCompatActivity() {
         fun updateLeaders(newLeaders: ArrayList<Leaders>?) {
             if (newLeaders != null) {
 
-                log( "updating leaders")
                 // проходимся по текущим данным, если что-то не совпадает с новыми данными, обновляем
                 for ((i, row) in leadersData.withIndex()) {
                     if (row.nickname != newLeaders[i].nickname) {
                         leadersData[i] = newLeaders[i]
                         animateNickname(i)
                     }
-                    if (row.riddle != newLeaders[i].riddle) {
+                    if (row.riddle != newLeaders[i].riddle || row.completeGame != newLeaders[i].completeGame) {
                         leadersData[i] = newLeaders[i]
                         animateLevel(i)
                     }
@@ -570,10 +554,10 @@ class MainActivity : AppCompatActivity() {
 
         // само изменение уровня
         private fun setLevel(position: Int) {
-            if (leadersData[position].riddle in 1..21) { // на
+            if (leadersData[position].riddle in 1..20) { // на
                 leadersLevels[position].text =
                     leadersData[position].riddle.toString() + " " + getString(R.string.lvl)
-            } else if (leadersData[position].riddle == 22) { // прошел игру
+            } else if (leadersData[position].completeGame && leadersData[position].riddle == 21) { // прошел игру
                 leadersLevels[position].text = getString(R.string.complete_game_level)
                 lines[position].setImageDrawable(getDrawable(R.drawable.winner_line))
             } else {
@@ -628,45 +612,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-/*private class CheckForceUpdateTask extends AsyncTask<Void,Void,ResponseFromServer> { // проверяет принудительные обновления
-
-        int typeUpdate; // тип обновления
-        private final int FORCE_UPDATE = 6;
-        private final int SOFT_UPDATE = 5;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected ResponseFromServer doInBackground(Void... voids) {
-            try {
-                ResponseFromServer responseFromServer = RequestController.Companion
-                        .getInstance()
-                        .getApiService(MainActivity.this)
-                        .checkUpdate(BuildConfig.VERSION_CODE)
-                        .execute().body();
-                return responseFromServer;
-            } catch (IOException e) {
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(ResponseFromServer response) {
-            super.onPostExecute(response);
-
-            if(response != null) {
-                switch (response.getResultCode()) {
-                    case FORCE_UPDATE: {
-                        AssistentDialog updateDialog = new AssistentDialog(AssistentDialog.DIALOG_FORCE_UPDATE);
-                        updateDialog.show(getSupportFragmentManager(),"UPDATE");
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    */
 }

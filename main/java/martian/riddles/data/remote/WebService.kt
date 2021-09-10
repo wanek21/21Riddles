@@ -17,6 +17,7 @@ class WebService @Inject constructor(
 
     // секретные слова, которые нужно передавать в запросах (+2 к безопасности)
     private val GET_PRIZE_KEY = "chair"
+    private val GET_LEADERS_KEY = "please"
 
     // регистрация
     suspend fun signUp(registerUser: RegisterUser): Resource<*> {
@@ -56,7 +57,7 @@ class WebService @Inject constructor(
     suspend fun getLeaders(): Resource<List<Leaders>> {
         var result: Resource<List<Leaders>> = Resource.error(R.string.unknown_error, null)
 
-        val response = serverApi.getLeaders("please")
+        val response = serverApi.getLeaders(GET_LEADERS_KEY)
         with(response) {
             suspendOnSuccess {
                 if (this.data != null) {

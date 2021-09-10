@@ -28,6 +28,10 @@ class DoneActivityViewModel @Inject constructor(
         }
     }
 
+    fun getMyLevel(): Int {
+        return usersRepository.getMyLevel()
+    }
+
     fun getEmailContact() {
         viewModelScope.launch(Dispatchers.IO) {
             _emailContact.postValue(usersRepository.getEmailContact())

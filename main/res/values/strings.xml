@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">21 Riddles</string>
-    <string name="ad_block" translatable="false">ca-app-pub-3637770884242866/5041268998</string><!--<string name="ad_block" translatable="false">ca-app-pub-3940256099942544/5224354917</string>-->
+    <string name="ad_block" translatable="false">ca-app-pub-3940256099942544/5224354917</string><!--<string name="ad_block" translatable="false">ca-app-pub-3940256099942544/5224354917</string>-->
 
     <!--ЭКРАН РЕГИСТРАЦИИ-->
     <string name="logup_info">Hey, you only need a nickname for the game, write it here</string>

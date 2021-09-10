@@ -35,8 +35,10 @@ class RiddlesActivityViewModel @Inject constructor(
     }
 
     fun checkAnswer(answer: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _answerStatus.postValue(riddlesController.checkAnswer(answer))
+        if(answer.isNotEmpty()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                _answerStatus.postValue(riddlesController.checkAnswer(answer))
+            }
         }
     }
 
