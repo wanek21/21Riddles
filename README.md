@@ -13,7 +13,9 @@ https://play.google.com/store/apps/details?id=martian.riddles
 В данный момент переписываю весь код под MVVM (на ветке mvvm). 
 Код, который сейчас в продакшене (очень плохой код), находится в ветке master
 
-P.S. Закрыл игру, обновлений больше не будет, код на ветке MVVM закончен на 90-95%
+P.S. Закрыл игру, обновлений больше не будет, код на ветке MVVM закончен на 90-95%.
+
+P.S.S Писал давно, код не очень хороший
 
 ![unnamed](https://user-images.githubusercontent.com/59777806/191038414-d10c5ef1-92e2-4d9d-bd6b-347973f5b388.jpg)
 ![unnamed-_2_](https://user-images.githubusercontent.com/59777806/191038420-09f6889f-fe8a-4f73-b616-bb565b50f6ea.jpg)
